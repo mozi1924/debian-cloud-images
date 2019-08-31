@@ -1,6 +1,12 @@
 from libcloud.compute.types import Provider
 from libcloud.compute.drivers.ec2 import BaseEC2NodeDriver, EC2Connection, NAMESPACE, VolumeSnapshot
 from libcloud.utils.xml import findtext, fixxpath
+from enum import Enum
+
+
+class Permission(Enum):
+    PUBLIC = 1
+    NONPUBLIC = 2
 
 
 class ExEC2NodeDriver(BaseEC2NodeDriver):
@@ -41,6 +47,27 @@ class ExEC2NodeDriver(BaseEC2NodeDriver):
         snapshot_id = findtext(element=response, xpath='snapshotId', namespace=NAMESPACE)
 
         return VolumeSnapshot(snapshot_id, self)
+
+    def ex_modify_image_attribute(self, image, attributes):
+        super().ex_modify_image_attribute(image, attributes)
+
+    def generate_permissions(self, name, perm=Permission.PUBLIC):
+        if perm == Permission.PUBLIC:
+            op = 'Add'
+        else:
+            op = 'Remove'
+        return {f'{name}.{op}.1.Group': 'all'}
+
+    def ex_publish_ami(self, image):
+        self.ex_modify_image_attribute(
+            image,
+            self.generate_permissions('LaunchPermission'),
+        )
+        for d in image.extra['block_device_mapping']:
+            if 'ebs' in d:
+                if 'snapshot_id' in d['ebs']:
+                    snapshots = self.list_snapshots(VolumeSnapshot(id=d['ebs']['snapshot_id'], driver=self))
+                    self.ex_modify_snapshot_attribute(snapshots[0], self.generate_permissions('CreateVolumePermission'))
 
 
 class ExEC2Region:

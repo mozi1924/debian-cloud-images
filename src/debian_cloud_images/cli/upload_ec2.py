@@ -8,7 +8,7 @@ from .upload_base import UploadBaseCommand
 from ..api.cdo.upload import Upload
 from ..api.wellknown import label_ucdo_provider, label_ucdo_type
 from ..utils import argparse_ext
-from ..utils.libcloud.compute.ec2 import ExEC2NodeDriver
+from ..utils.libcloud.compute.ec2 import ExEC2NodeDriver, Permission
 from ..utils.libcloud.storage.s3 import S3BucketStorageDriver
 
 
@@ -28,7 +28,7 @@ class ImageUploaderEc2:
         self.secret = secret
         self.regions = regions
         self.add_tags = add_tags or {}
-        self.permission_public = permission_public
+        self.permission = Permission.PUBLIC if permission_public else Permission.NONPUBLIC
 
         self.__compute = self.__storage = None
 
@@ -139,7 +139,7 @@ class ImageUploaderEc2:
             driver.ex_create_tags(ec2_image, self.generate_tags(image, public_info))
             driver.ex_modify_image_attribute(
                 ec2_image,
-                self.generate_permissions('LaunchPermission'),
+                self.generate_permissions('LaunchPermission', self.permission)
             )
 
             ec2_images[driver.region_name] = ec2_image
@@ -167,7 +167,7 @@ class ImageUploaderEc2:
             compute.ex_create_tags(snapshot, self.generate_tags(image, public_info))
             compute.ex_modify_snapshot_attribute(
                 snapshot,
-                self.generate_permissions('CreateVolumePermission'),
+                self.generate_permissions('CreateVolumePermission', self.permission),
             )
 
             snapshots_creating.append(snapshot)
