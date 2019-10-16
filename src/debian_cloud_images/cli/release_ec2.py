@@ -8,11 +8,11 @@ from ..utils.libcloud.compute.ec2 import ExEC2NodeDriver
 class Ec2Publisher:
     compute_cls = ExEC2NodeDriver
 
-    def __init__(self, key, secret, regions, ami_name, permission_public=True):
+    def __init__(self, key, secret, regions, ami_id, permission_public=True):
         self.key = key
         self.secret = secret
         self.regions = regions
-        self.ami_name = ami_name
+        self.ami_id = ami_id
         self.permission_public = permission_public
 
         self.__compute = None
@@ -20,9 +20,9 @@ class Ec2Publisher:
     def __call__(self):
         compute_regions = self.compute_regions()
         for region, compute in compute_regions.items():
-            logging.info("Looking for %s in %s", self.ami_name, region)
+            logging.info("Looking for %s in %s", self.ami_id, region)
             region_images = compute.list_images(ex_owner='self',
-                                                ex_filters={'name': self.ami_name})
+                                                ex_image_ids=[self.ami_id])
             if len(region_images) == 1:
                 logging.info("Found %s", region_images[0].id)
                 compute.ex_publish_ami(region_images[0])
@@ -39,7 +39,7 @@ class Ec2Publisher:
 
     @property
     def name(self):
-        return self.ami_name
+        return self.ami_id
 
     @property
     def compute(self):
@@ -66,16 +66,16 @@ class Ec2Publisher:
 class ReleaseEc2Command(BaseCommand):
     argparser_name = 'release-ec2'
     argparser_help = 'release Amazon EC2 AMIs by marking them public'
-    argparser_usage = '%(prog)s AMI_NAME'
+    argparser_usage = '%(prog)s AMI_ID'
 
     @classmethod
     def _argparse_register(cls, parser, config):
         super()._argparse_register(parser, config)
 
         parser.add_argument(
-            metavar='AMI_NAME',
-            dest='ami_name',
-            help='Operate on AMIs with the specified name',
+            metavar='AMI_ID',
+            dest='ami_id',
+            help='Operate on AMIs with the specified ID',
 
         )
         parser.add_argument(
@@ -98,14 +98,14 @@ class ReleaseEc2Command(BaseCommand):
             env='AWS_SECRET_ACCESS_KEY',
         )
 
-    def __init__(self, *, access_key_id=None, access_secret_key=None, regions=[], ami_name=None, **kw):
+    def __init__(self, *, access_key_id=None, access_secret_key=None, regions=[], ami_id=None, **kw):
         super().__init__(**kw)
 
         self.publisher = Ec2Publisher(
             key=access_key_id,
             secret=access_secret_key,
             regions=regions,
-            ami_name=ami_name,
+            ami_id=ami_id,
         )
 
     def __call__(self):
