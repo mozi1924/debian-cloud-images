@@ -8,28 +8,24 @@ from ..utils.libcloud.compute.ec2 import ExEC2NodeDriver
 class Ec2Publisher:
     compute_cls = ExEC2NodeDriver
 
-    def __init__(self, key, secret, regions, ami_id, permission_public=True):
+    def __init__(self, key, secret, region, ami_id, permission_public=True):
         self.key = key
         self.secret = secret
-        self.regions = regions
+        self.region = region
         self.ami_id = ami_id
         self.permission_public = permission_public
 
         self.__compute = None
 
     def __call__(self):
-        compute_regions = self.compute_regions()
-        for region, compute in compute_regions.items():
-            logging.info("Looking for %s in %s", self.ami_id, region)
-            region_images = compute.list_images(ex_owner='self',
-                                                ex_image_ids=[self.ami_id])
-            if len(region_images) == 1:
-                logging.info("Found %s", region_images[0].id)
-                compute.ex_publish_ami(region_images[0])
-            elif len(region_images) == 0:
-                logging.warning("No matching images")
-            else:
-                raise RuntimeError("Multiple matching images in %s! %d" % (region, len(region_images)))
+        logging.info("Looking for %s in %s", self.ami_id, self.region)
+        images = self.compute.list_images(ex_owner='self',
+                                          ex_image_ids=[self.ami_id])
+        if images:
+            logging.info("Found %s", images[0].id)
+            self.compute.ex_publish_ami(images[0])
+        else:
+            logging.warning("No matching images")
 
     def generate_permissions(self, name):
         if self.permission_public:
@@ -43,24 +39,13 @@ class Ec2Publisher:
 
     @property
     def compute(self):
-        ret = self.__compute
-        if ret is None:
-            ret = self.__compute = {
-                r.name: self.compute_cls(key=self.key, secret=self.secret, region=r.name)
-                for r in self.compute_cls(key=self.key, secret=self.secret, region='us-east-1').ex_list_regions()
-            }
-        return ret
+        if self.__compute is None:
+            regions = {x.name for x in self.compute_cls(key=self.key, secret=self.secret, region='us-east-1').ex_list_regions()}
+            if self.region not in regions:
+                raise RuntimeError('Unknown region %s' % self.region)
 
-    def compute_regions(self):
-        if self.regions:
-            if 'all' in self.regions:
-                # All regions specified, use complete list
-                return self.compute
-
-            # Explicit regions specified
-            return {r: v for r, v in self.compute.items() if r in self.regions}
-
-        return {r: v for r, v in self.compute.items()}
+            self.__compute = self.compute_cls(key=self.key, secret=self.secret, region=self.region)
+        return self.__compute
 
 
 class ReleaseEc2Command(BaseCommand):
@@ -79,13 +64,9 @@ class ReleaseEc2Command(BaseCommand):
 
         )
         parser.add_argument(
-            '--region',
-            action=argparse_ext.ConfigAppendAction,
-            config=config,
-            config_key='ec2-regions',
-            dest='regions',
-            help='Regions to copy snapshot and image to or "all"\n    (default: all)',
-            nargs='+',
+            metavar='REGION',
+            dest='region',
+            help='Region for image release',
         )
         parser.add_argument(
             '--access-key-id',
@@ -98,13 +79,13 @@ class ReleaseEc2Command(BaseCommand):
             env='AWS_SECRET_ACCESS_KEY',
         )
 
-    def __init__(self, *, access_key_id=None, access_secret_key=None, regions=[], ami_id=None, **kw):
+    def __init__(self, *, access_key_id=None, access_secret_key=None, region=None, ami_id=None, **kw):
         super().__init__(**kw)
 
         self.publisher = Ec2Publisher(
             key=access_key_id,
             secret=access_secret_key,
-            regions=regions,
+            region=region,
             ami_id=ami_id,
         )
 
