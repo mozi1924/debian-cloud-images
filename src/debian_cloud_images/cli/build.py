@@ -144,6 +144,10 @@ VendorEnum = enum.Enum(  # type:ignore
             'fai_size': '2G',
             'fai_classes': ('NOCLOUD', ),
         },
+        'vagrant': {
+            'fai_size': '2G',
+            'fai_classes': ('VAGRANT', ),
+        },
     },
     type=Vendor,
 )
