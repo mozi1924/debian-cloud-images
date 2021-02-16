@@ -19,7 +19,7 @@ class TestEtc:
         p = image_path / 'etc' / 'resolv.conf'
         assert not p.exists() or p.is_symlink(), '/etc/resolv.conf does exist and is not a symlink'
 
-    def test_passwd_name(self, image_passwd_entry):
+    def test_passwd_name(self, image_passwd_entry, image_build_info):
         name = image_passwd_entry.name
         if name in (
             # From package base-passwd
@@ -38,12 +38,14 @@ class TestEtc:
             return
         if name.startswith('_') or name.startswith('systemd-'):
             return
+        if name == 'vagrant' and image_build_info['vendor'] == 'vagrant':
+            return
         pytest.fail('/etc/passwd includes user {} with not allowed name'.format(name), pytrace=False)
 
     def test_passwd_shell(self, image_passwd_entry):
         name = image_passwd_entry.name
         shell = image_passwd_entry.shell
-        if shell == '/bin/bash' and name == 'root':
+        if shell == '/bin/bash' and name in ('root', 'vagrant'):
             return
         if shell == '/bin/sync' and name == 'sync':
             return
@@ -57,5 +59,7 @@ class TestEtc:
         if uid >= 0 and uid < 1000:
             return
         if uid == 65534:
+            return
+        if uid == 1000 and name == 'vagrant':
             return
         pytest.fail('/etc/passwd includes user {} with not allowed uid {}'.format(name, uid), pytrace=False)
