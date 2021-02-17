@@ -439,6 +439,28 @@ nocloud sid ppc64el build:
     CLOUD_RELEASE: sid
     CLOUD_VENDOR: nocloud
 
+.vagrant build:
+  extends: .build
+  rules:
+  - if: '$CI_MERGE_REQUEST_ID == null && $BUILD_VAGRANT'
+    when: on_success
+  - if: '$CI_MERGE_REQUEST_ID == null'
+    when: manual
+
+vagrant bullseye amd64 build:
+  extends: .vagrant build
+  variables:
+    CLOUD_ARCH: amd64
+    CLOUD_RELEASE: bullseye
+    CLOUD_VENDOR: vagrant
+
+vagrant sid amd64 build:
+  extends: .vagrant build
+  variables:
+    CLOUD_ARCH: amd64
+    CLOUD_RELEASE: sid
+    CLOUD_VENDOR: vagrant
+
 ####
 # Provider uploads for developer pushs
 ####
