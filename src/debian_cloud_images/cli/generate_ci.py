@@ -147,12 +147,6 @@ class GenerateCiCommand(BaseCommand):
                     if not enable:
                         continue
 
-                    # XXX
-                    if self.public_type.name == 'release':
-                        enable_build = False
-                    else:
-                        enable_build = True
-
                     variables = {
                         'CLOUD_ARCH': arch_name,
                         'CLOUD_RELEASE': release_name,
@@ -181,31 +175,47 @@ class GenerateCiCommand(BaseCommand):
                         'optional': True,
                     }
                     enable_variable = f'PIPELINE_RELEASE_{release_name.upper().replace("-", "_")}'
-                    rule = {'if': f'${enable_variable}'}
+
+                    # XXX
+                    if self.public_type.name == 'release':
+                        enable_build = False
+                        enable_upload_all = True
+                        rule = {'if': f'${enable_variable}'}
+                    elif self.public_type.name == 'daily':
+                        enable_build = True
+                        enable_upload_all = True
+                        rule = {'if': f'${enable_variable}'}
+                    else:
+                        enable_build = True
+                        enable_upload_all = False
+                        rule = {'if': f'${enable_variable} && $CI_MERGE_REQUEST_ID == ""', 'when': 'manual'}
 
                     # XXX
                     if self.public_type.name != 'release':
                         out.setdefault('variables', {})[enable_variable] = '1'
 
-                    if upload_group:
-                        variables['CLOUD_UPLOAD_GROUP'] = upload_group
-                        variables_postupload['CLOUD_UPLOAD_GROUP'] = upload_group
-                        name_upload_group = f'{vendor_name} group-{upload_group} upload'
-                        name_postupload = f'{vendor_name} group-{upload_group} postupload'
-                    else:
-                        name_upload_group = f'{vendor_name} upload'
-                        name_postupload = f'{vendor_name} postupload'
+                    if enable_upload_all:
+                        if upload_group:
+                            variables['CLOUD_UPLOAD_GROUP'] = upload_group
+                            variables_postupload['CLOUD_UPLOAD_GROUP'] = upload_group
+                            name_upload_group = f'{vendor_name} group-{upload_group} upload'
+                            name_postupload = f'{vendor_name} group-{upload_group} postupload'
+                        else:
+                            name_upload_group = f'{vendor_name} upload'
+                            name_postupload = f'{vendor_name} postupload'
 
-                    job_upload_all: dict[str, typing.Any] = out.setdefault(name_upload_all, {
-                        'extends': '.upload',
-                        'variables': variables_upload_all,
-                        'needs': SortedList(key='job'),
-                        'rules': SortedList([], key='if'),
-                    })
-                    job_upload_all['rules'].add(rule)
+                        job_upload_all: dict[str, typing.Any] = out.setdefault(name_upload_all, {
+                            'extends': '.upload',
+                            'variables': variables_upload_all,
+                            'needs': SortedList(key='job'),
+                            'rules': SortedList([], key='if'),
+                        })
+                        job_upload_all['rules'].add(rule)
 
                     if enable_build:
-                        job_upload_all['needs'].add(needs_build)
+                        if enable_upload_all:
+                            job_upload_all['needs'].add(needs_build)
+
                         out[name_build] = {
                             'extends': '.build',
                             'variables': variables,
