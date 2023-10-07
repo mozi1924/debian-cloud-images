@@ -19,3 +19,5 @@ echo vagrant:vagrant | $ROOTCMD chpasswd
 
 # https://developer.hashicorp.com/vagrant/docs/boxes/base#ssh-tweaks
 ainsl /etc/ssh/sshd_config 'UseDNS no'
+
+$ROOTCMD systemctl enable generate-sshd-host-keys.service

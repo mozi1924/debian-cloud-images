@@ -27,6 +27,8 @@ rm -f $target/var/lib/dpkg/available*
 touch $target/etc/machine-id
 touch $target/var/lib/dpkg/available
 
-shred --remove $target/etc/ssh/ssh_host_*
+if ! ifclass VAGRANT; then
+  shred --remove $target/etc/ssh/ssh_host_*
+fi
 
 fstrim $target

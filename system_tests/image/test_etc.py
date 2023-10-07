@@ -123,3 +123,9 @@ class TestEtc:
         if uid == 1000 and name == 'vagrant':
             return
         pytest.fail('/etc/passwd includes user {} with not allowed uid {}'.format(name, uid), pytrace=False)
+
+    def test_ssh_host_keys(self, image_path, image_build_info):
+        p = image_path / 'etc' / 'ssh'
+
+        assert not any(p.glob('ssh_host_*_key')), 'ssh host key exist'
+        assert not any(p.glob('ssh_host_*_key.pub')), 'ssh host key exist'
