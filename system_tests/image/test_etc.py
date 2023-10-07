@@ -36,7 +36,7 @@ class TestEtc:
     def test_group_exist(self, image_etc_group, name):
         assert name in image_etc_group, f'/etc/group is missing group {name}'
 
-    def test_group_name(self, image_etc_group_entry):
+    def test_group_name(self, image_etc_group_entry, image_build_info):
         name = image_etc_group_entry.name
         if name in (
             # From package base-passwd
@@ -59,14 +59,20 @@ class TestEtc:
             return
         if name.startswith('_') or name.startswith('systemd-'):
             return
+        if image_build_info['vendor'] == 'vagrant' and name == 'vagrant':
+            assert int(image_etc_group_entry.gid) == 1000
+            return
         pytest.fail('/etc/group includes group {} with not allowed name'.format(name), pytrace=False)
 
-    def test_group_gid(self, image_etc_group_entry):
+    def test_group_gid(self, image_etc_group_entry, image_build_info):
         name = image_etc_group_entry.name
         gid = int(image_etc_group_entry.gid)
         if gid >= 0 and gid < 1000:
             return
         if gid == 65534:
+            return
+        if image_build_info['vendor'] == 'vagrant' and name == 'vagrant':
+            assert gid == 1000
             return
         pytest.fail('/etc/group includes group {} with not allowed gid {}'.format(name, gid), pytrace=False)
 
