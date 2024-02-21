@@ -1234,5 +1234,83 @@
       "CLOUD_RELEASE": "trixie",
       "CLOUD_VENDOR": "nocloud"
     }
+  },
+  "vagrant sid amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "vagrant"
+    }
+  },
+  "vagrant sid arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "vagrant"
+    }
+  },
+  "vagrant sid ppc64el build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "ppc64el",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "vagrant"
+    }
+  },
+  "vagrant trixie amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "vagrant"
+    }
+  },
+  "vagrant trixie arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "vagrant"
+    }
+  },
+  "vagrant trixie ppc64el build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "ppc64el",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "vagrant"
+    }
   }
 }

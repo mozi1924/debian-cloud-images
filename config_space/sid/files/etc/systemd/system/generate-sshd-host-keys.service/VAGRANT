@@ -1,0 +1,11 @@
+[Unit]
+Description=Generate sshd host keys on first boot of a vagrant environment
+ConditionPathExistsGlob=!/etc/ssh/ssh_host_*_key
+Before=ssh.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'for keyfile in $(sshd -G | awk "/^hostkey /{print \\$$2}"); do alg=$(echo "$keyfile" | cut -f 3 -d _); ssh-keygen -q -f "$keyfile" -N "" -t "$alg"; done'
+
+[Install]
+WantedBy=multi-user.target
