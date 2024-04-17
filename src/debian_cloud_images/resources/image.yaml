@@ -25,60 +25,60 @@ releases:
   basename: bullseye
   id: '11'
   baseid: '11'
-  faiClasses: [BULLSEYE, LINUX_VERSION_BASE, EXTRAS]
+  faiClasses: [BULLSEYE, LINUX_VERSION_BASE]
   matches:
   - matchArches: [amd64, arm64]
 - name: bullseye-backports
   basename: bullseye-backports
   id: 11-backports
   baseid: '11'
-  faiClasses: [BULLSEYE, LINUX_VERSION_BACKPORTS, EXTRAS]
+  faiClasses: [BULLSEYE, LINUX_VERSION_BACKPORTS]
   matches:
   - matchArches: [amd64, arm64]
 - name: bookworm
   basename: bookworm
   id: '12'
   baseid: '12'
-  faiClasses: [BOOKWORM, LINUX_VERSION_BASE, EXTRAS]
+  faiClasses: [BOOKWORM, LINUX_VERSION_BASE]
   matches:
   - matchArches: [amd64, arm64, ppc64el]
 - name: bookworm-backports
   basename: bookworm-backports
   id: 12-backports
   baseid: '12'
-  faiClasses: [BOOKWORM, LINUX_VERSION_BACKPORTS, EXTRAS]
+  faiClasses: [BOOKWORM, LINUX_VERSION_BACKPORTS]
   matches:
   - matchArches: [amd64, arm64, ppc64el]
 - name: trixie
   basename: trixie
   id: '13'
   baseid: '13'
-  faiClasses: [TRIXIE, LINUX_VERSION_BASE, EXTRAS]
+  faiClasses: [TRIXIE, LINUX_VERSION_BASE]
   matches:
   - matchArches: [amd64, arm64, ppc64el, riscv64]
 - name: trixie-backports
   basename: trixie-backports
   id: 13-backports
   baseid: '13'
-  faiClasses: [TRIXIE, LINUX_VERSION_BACKPORTS, EXTRAS]
+  faiClasses: [TRIXIE, LINUX_VERSION_BACKPORTS]
   matches:
   - matchArches: [amd64, arm64, ppc64el]
 - name: forky
   basename: forky
   id: '14'
   baseid: '14'
-  faiClasses: [FORKY, LINUX_VERSION_BASE, EXTRAS]
+  faiClasses: [FORKY, LINUX_VERSION_BASE]
   matches:
   - matchArches: [amd64, arm64, ppc64el, riscv64]
 - name: sid
   basename: sid
   id: sid
   baseid: sid
-  faiClasses: [SID, LINUX_VERSION_BASE, EXTRAS]
+  faiClasses: [SID, LINUX_VERSION_BASE]
 
 vendors:
 - name: azure
-  faiClasses: [SYSTEM_BOOT, CLOUD, AZURE, LINUX_VARIANT_CLOUD, TIME_CHRONY, IPV6_DHCP]
+  faiClasses: [SYSTEM_BOOT, CLOUD, AZURE, LINUX_VARIANT_CLOUD, TIME_CHRONY, IPV6_DHCP, EXTRAS]
   size: 30
   matches:
   - matchArches: [amd64]
@@ -87,27 +87,27 @@ vendors:
     op: Disable
   - matchArches: [arm64]
 - name: ec2
-  faiClasses: [SYSTEM_BOOT, CLOUD, EC2, LINUX_VARIANT_CLOUD, TIME_SYSTEMD, IPV6_DHCP]
+  faiClasses: [SYSTEM_BOOT, CLOUD, EC2, LINUX_VARIANT_CLOUD, TIME_SYSTEMD, IPV6_DHCP, EXTRAS]
   size: 8
   matches:
   - matchArches: [amd64, arm64]
 - name: gce
-  faiClasses: [SYSTEM_BOOT, CLOUD, GCE, LINUX_VARIANT_CLOUD, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, CLOUD, GCE, LINUX_VARIANT_CLOUD, TIME_SYSTEMD, EXTRAS]
   size: 10
   matches:
   - matchReleases: [bullseye]
     op: Disable
   - matchArches: [amd64]
 - name: generic
-  faiClasses: [SYSTEM_BOOT, CLOUD, GENERIC, LINUX_VARIANT_BASE, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, CLOUD, GENERIC, LINUX_VARIANT_BASE, TIME_SYSTEMD, EXTRAS]
   size: 3
 - name: genericcloud
-  faiClasses: [SYSTEM_BOOT, CLOUD, GENERIC, LINUX_VARIANT_CLOUD, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, CLOUD, GENERIC, LINUX_VARIANT_CLOUD, TIME_SYSTEMD, EXTRAS]
   size: 3
   matches:
     - matchArches: [amd64, arm64]
 - name: nocloud
-  faiClasses: [SYSTEM_BOOT, NOCLOUD, LINUX_VARIANT_BASE, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, NOCLOUD, LINUX_VARIANT_BASE, TIME_SYSTEMD, EXTRAS]
   size: 3
 
 types:
