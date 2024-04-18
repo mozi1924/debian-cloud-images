@@ -86,6 +86,16 @@ vendors:
     matchReleases: [bullseye]
     op: Disable
   - matchArches: [arm64]
+- name: containerinit
+  faiClasses: [SYSTEM_CONTAINERINIT]
+  # CI can't do non-image builds yet
+  matches:
+  - op: Disable
+- name: containergeneric
+  faiClasses: []
+  # CI can't do non-image builds yet
+  matches:
+  - op: Disable
 - name: ec2
   faiClasses: [SYSTEM_BOOT, CLOUD, EC2, LINUX_VARIANT_CLOUD, TIME_SYSTEMD, IPV6_DHCP, EXTRAS]
   size: 8
