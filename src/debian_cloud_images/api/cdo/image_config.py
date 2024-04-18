@@ -122,7 +122,7 @@ class v1alpha1_ImageConfigPublicTypeSchema(Schema):
 @dataclasses.dataclass
 class ImageConfigVendor:
     name: str
-    size: int
+    size: typing.Optional[int] = dataclasses.field(default=None)
     fai_classes: list[str] = dataclasses.field(default_factory=list)
     matches: list[ImageConfigMatch] = dataclasses.field(default_factory=list)
 
@@ -130,7 +130,7 @@ class ImageConfigVendor:
 class v1alpha1_ImageConfigVendorSchema(Schema):
     name = fields.Str(required=True)
     fai_classes = fields.List(fields.Str(), data_key='faiClasses')
-    size = fields.Integer(required=True)
+    size = fields.Integer()
     matches = fields.Nested(v1alpha1_ImageConfigMatchSchema, many=True)
 
     @post_load
