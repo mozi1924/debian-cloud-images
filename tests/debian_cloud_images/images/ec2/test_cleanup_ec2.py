@@ -110,7 +110,7 @@ class TestCleanup:
     def mockdelete_snapshot(*args):
         return
 
-    def test_cleanup_cloud_versions(self, monkeypatch, mock_ec2info, mock_ec2_config, caplog):
+    async def test_cleanup_cloud_versions(self, monkeypatch, mock_ec2info, mock_ec2_config, caplog):
         v = StepCloudVersions(mock_ec2info)
         v._children["20240823-1848"] = StepCloudVersion(v, ImageVersion.from_string("20240823-1848"))
         v._children["20240701-1001"] = StepCloudVersion(v, ImageVersion.from_string("20240701-1001"))
@@ -121,13 +121,13 @@ class TestCleanup:
         monkeypatch.setattr(ExEC2NodeDriver, "destroy_volume_snapshot", TestCleanup.mockdelete_snapshot)
         caplog.set_level(logging.DEBUG)
 
-        CleanupEc2Command(config=mock_ec2_config,
-                          delete_after=30,
-                          date_today=datetime.datetime(2024, 8, 28,
-                                                       hour=1, minute=10, second=49, microsecond=0,),
-                          )()
+        await CleanupEc2Command(config=mock_ec2_config,
+                                delete_after=30,
+                                date_today=datetime.datetime(2024, 8, 28,
+                                                             hour=1, minute=10, second=49, microsecond=0,),
+                                )()
 
-    def test_cleanup_cloud_versions_missing_snapshot(self, monkeypatch, mock_ec2info, mock_ec2_config, caplog):
+    async def test_cleanup_cloud_versions_missing_snapshot(self, monkeypatch, mock_ec2info, mock_ec2_config, caplog):
         def raise_exception(*args):
             raise exception_from_message(code=418,
                                          message="InvalidSnapshot.NotFound: (ec2 error text goes here).",
@@ -143,13 +143,13 @@ class TestCleanup:
         monkeypatch.setattr(ExEC2NodeDriver, "destroy_volume_snapshot", raise_exception)
         caplog.set_level(logging.DEBUG)
 
-        CleanupEc2Command(config=mock_ec2_config,
-                          delete_after=30,
-                          date_today=datetime.datetime(2024, 8, 28,
-                                                       hour=1, minute=10, second=49, microsecond=0,),
-                          )()
+        await CleanupEc2Command(config=mock_ec2_config,
+                                delete_after=30,
+                                date_today=datetime.datetime(2024, 8, 28,
+                                                             hour=1, minute=10, second=49, microsecond=0,),
+                                )()
 
-    def test_cleanup_cloud_versions_internal_error(self, monkeypatch, mock_ec2info, mock_ec2_config, caplog):
+    async def test_cleanup_cloud_versions_internal_error(self, monkeypatch, mock_ec2info, mock_ec2_config, caplog):
         def raise_exception(*args):
             raise exception_from_message(code=500,
                                          message="InternalError: An internal error has occurred",
@@ -167,11 +167,11 @@ class TestCleanup:
         caplog.set_level(logging.DEBUG)
 
         with pytest.raises(BaseHTTPError) as e:
-            CleanupEc2Command(config=mock_ec2_config,
-                              delete_after=30,
-                              date_today=datetime.datetime(2024, 8, 28,
-                                                           hour=1, minute=10, second=49, microsecond=0,),
-                              )()
+            await CleanupEc2Command(config=mock_ec2_config,
+                                    delete_after=30,
+                                    date_today=datetime.datetime(2024, 8, 28,
+                                                                 hour=1, minute=10, second=49, microsecond=0,),
+                                    )()
             assert "InternalError" in str(e.value)
 
 

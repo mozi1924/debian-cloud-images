@@ -10,3 +10,4 @@ testpaths = ["src", "tests"]
 addopts = [
   "--import-mode=importlib",
 ]
+asyncio_mode = 'auto'

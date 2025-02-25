@@ -20,6 +20,6 @@ class UploadBaseCommand(BaseCommand):
         for manifest in manifests:
             self.images.read(manifest)
 
-    def __call__(self):
+    async def __call__(self):
         for image in self.images.values():
-            self.uploader(image, public_info=self.image_public_info.apply(image.build_info))
+            await self.uploader(image, public_info=self.image_public_info.apply(image.build_info))

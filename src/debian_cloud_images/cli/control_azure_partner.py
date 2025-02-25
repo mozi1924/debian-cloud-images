@@ -54,7 +54,7 @@ class ControlAzurePartnerlegacyCommand(BaseCommand):
         self._partner_tenant = str(self.config_get('azure.cloudpartner.tenant'))
         self._partner_publisher = self.config_get('azure.cloudpartner.publisher')
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         partner_conn = AzureGenericOAuth2Connection(
             client_id=self._client_id,
             client_secret=self._client_secret,

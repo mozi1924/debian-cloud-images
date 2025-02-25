@@ -57,7 +57,7 @@ class ImageUploaderGce:
             container_name=self.bucket,
         )
 
-    def __call__(self, image, public_info):
+    async def __call__(self, image, public_info):
         gce_family = public_info.vendor_gce_family
         gce_name = public_info.vendor_name63
 

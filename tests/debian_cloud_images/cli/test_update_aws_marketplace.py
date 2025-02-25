@@ -165,53 +165,53 @@ class TestAwsMarketplaceAutomation:
 
     # Execution with an empty configuration shouldn't result in any
     # populated changesets or API calls, but also should not crash
-    def test_unconfigured(self, monkeypatch, images_path):
+    async def test_unconfigured(self, monkeypatch, images_path):
         mock_updater = MagicMock()
         monkeypatch.setattr(MarketplaceConnection, 'start_changeset', mock_updater)
         manifests = [images_path / 'test.upload.json']
         c = UpdateAwsMarketplaceCommand(manifests, dry_run=False, config={})
-        c()
+        await c()
         assert len(c.updater.changeset.changes) == 0
         mock_updater.assert_not_called()
 
     # A change is posted to the service
-    def test_full(self, monkeypatch, images_path):
+    async def test_full(self, monkeypatch, images_path):
         mock_updater = MagicMock()
         monkeypatch.setattr(MarketplaceConnection, 'start_changeset', mock_updater)
         manifests = [images_path / 'test.upload.json']
         c = UpdateAwsMarketplaceCommand(manifests, dry_run=False, config=self.config)
-        c()
+        await c()
         assert len(c.updater.changeset.changes) == 1
         mock_updater.assert_called_once()
 
-    def test_multiple(self, monkeypatch, images_path):
+    async def test_multiple(self, monkeypatch, images_path):
         mock_updater = MagicMock()
         monkeypatch.setattr(MarketplaceConnection, 'start_changeset', mock_updater)
         manifests = [images_path / 'test.upload.json', images_path / 'test.upload.2.json']
         c = UpdateAwsMarketplaceCommand(manifests, dry_run=False, config=self.config)
-        c()
+        await c()
         assert len(c.updater.changeset.changes) == 2
         mock_updater.assert_called_once()
 
     # A manifest contains uploads, but none of appropriate for our configuration.
     # This should result in an empty changeset and no API calls
-    def test_nomatch(self, monkeypatch, images_path):
+    async def test_nomatch(self, monkeypatch, images_path):
         mock_updater = MagicMock()
         monkeypatch.setattr(MarketplaceConnection, 'start_changeset', mock_updater)
         manifests = [images_path / 'test-nomatch.json']
         c = UpdateAwsMarketplaceCommand(manifests, dry_run=False, config=self.config)
-        c()
+        await c()
         assert len(c.updater.changeset.changes) == 0
         mock_updater.assert_not_called()
 
-    def test_release_notes_env(self, monkeypatch, images_path):
+    async def test_release_notes_env(self, monkeypatch, images_path):
         mock_updater = MagicMock()
         monkeypatch.setattr(MarketplaceConnection, 'start_changeset', mock_updater)
         value = 'release notes test value'
         monkeypatch.setenv('DCI_CONFIG_ec2_marketplace_listings_bullseye_releasenotes', value)
         manifests = [images_path / 'test.upload.json']
         c = UpdateAwsMarketplaceCommand(manifests, dry_run=True, config=self.config)
-        c()
+        await c()
         assert len(c.updater.changeset.changes) == 1
         assert value in str(c.updater.changeset.changes[0]._details)
 

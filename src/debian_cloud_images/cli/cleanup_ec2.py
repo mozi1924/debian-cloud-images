@@ -72,7 +72,7 @@ class CleanupEc2Command(BaseCommand):
                 for region in regions
             }
 
-    def __call__(self):
+    async def __call__(self):
         if self.delete_date:
             logging.info(f'Deleting images before {self.delete_date.strftime("%Y-%m-%d")}')
             Ec2Images(self.no_op, None, self.account, self.drivers_compute, None).cleanup(self.delete_date)

@@ -74,7 +74,7 @@ class ImageUploaderEc2:
             ret = self.__storage = self.storage_cls(bucket=self.bucket, key=self.key, secret=self.secret)
         return ret
 
-    def __call__(self, image, public_info):
+    async def __call__(self, image, public_info):
         name = public_info.vendor_name
 
         obj = self.upload_file(image, name)
