@@ -114,7 +114,7 @@ class UploadAzureCommand(UploadBaseCommand):
         if len(self.images) > 1:
             raise RuntimeError('Can only handle one image at a time')
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         computedisk: ImagesAzureComputedisk | None = None
         computeimage: ImagesAzureComputeimage | None = None
 

@@ -75,7 +75,7 @@ class UploadCommand(UploadBaseCommand):
         self.provider = provider
         self.storage = storage
 
-    def __call__(self):
+    async def __call__(self):
         PublicImages(
             self.no_op,
             self.image_public_info,

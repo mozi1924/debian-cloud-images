@@ -251,7 +251,7 @@ class BuildDiskimageCommand(BaseCommand):
         self.copy_part_root(part_root_path, part_root, part_root_fsuuid)
         self.copy_part_efi(part_efi_path, part_efi)
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         oci = OciImage(self.output)
 
         index = oci.get_index()

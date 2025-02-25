@@ -97,7 +97,7 @@ class CleanupSSMCommand(BaseCommand):
             self.regions = [self.compute_cls(key=self.access_key_id, secret=self.secret_key,
                                              token=self.token, region=region) for region in regions]
 
-    def __call__(self):
+    async def __call__(self):
         for region in self.regions:
             logging.debug(f'Running SSM parameter cleanup in {region}')
             c = SSMConnection(

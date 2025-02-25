@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import asyncio
 import dataclasses
 from collections.abc import (
     Callable,
@@ -27,7 +28,7 @@ class CliCommand:
     def __init__(self, *, argparser: argparse.ArgumentParser | None = None) -> None:
         self.argparser = argparser
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         if self.argparser is not None:
             self.argparser.print_help()
         raise NotImplementedError
@@ -116,4 +117,4 @@ class CliRegistry:
         args = parser.parse_args()
         kw = vars(args)
         realcls = kw.pop('__cls')
-        realcls(**kw)()
+        asyncio.run(realcls(**kw)())

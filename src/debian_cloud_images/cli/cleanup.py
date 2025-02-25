@@ -71,7 +71,7 @@ class CleanupCommand(BaseCommand):
         else:
             self.delete_date = None
 
-    def __call__(self):
+    async def __call__(self):
         if self.delete_date:
             logging.info(f'Deleting images before {self.delete_date.strftime("%Y-%m-%d")}')
             PublicImages(

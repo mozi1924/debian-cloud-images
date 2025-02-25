@@ -25,7 +25,7 @@ class SSMVariableSetter:
         if only_regions is not None:
             self.only_regions = only_regions.split(',')
 
-    def __call__(self):
+    async def __call__(self):
 
         # Keep track of keys we've already set, per region
         regional_keys = {}
@@ -160,7 +160,7 @@ class PutSSMCommand(BaseCommand):
             only_regions=only_regions,
         )
 
-    def __call__(self):
+    async def __call__(self):
         self.setter()
 
 

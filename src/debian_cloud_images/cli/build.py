@@ -276,7 +276,7 @@ class BuildCommand(BaseCommand):
                 info=self.c.info,
             )
 
-    def __call__(self):
+    async def __call__(self):
         self.fai(not self.noop)
         digest = self.tar(not self.noop)
         self.manifest.write(not self.noop, (digest,))

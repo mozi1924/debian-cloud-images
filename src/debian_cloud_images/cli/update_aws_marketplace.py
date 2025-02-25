@@ -138,7 +138,7 @@ class UpdateAwsMarketplaceCommand(BaseCommand):
             self.images.read(m)
         self.extract_marketplace_uploads()
 
-    def __call__(self):
+    async def __call__(self):
         self.updater.apply()
 
 # Local variables:

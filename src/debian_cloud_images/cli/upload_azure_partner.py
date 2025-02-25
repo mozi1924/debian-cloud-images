@@ -108,7 +108,7 @@ class UploadAzurePartnerlegacyCommand(UploadBaseCommand):
             raise RuntimeError('Can only handle one image at a time')
         self.image = list(self.images.values())[0]
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         partner_conn = AzureGenericOAuth2Connection(
             client_id=self._client_id,
             client_secret=self._client_secret,

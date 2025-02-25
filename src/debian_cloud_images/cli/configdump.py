@@ -8,7 +8,7 @@ from .base import cli_internal, BaseCommand
     help='',
 )
 class ConfigdumpCommand(BaseCommand):
-    def __call__(self):
+    async def __call__(self):
         self._config.dump()
         self._config_image.dump()
 

@@ -266,7 +266,7 @@ class BuildCommand(BaseCommand):
         self.env['CLOUD_BUILD_NAME'] = 'rootfs'
         self.env['CLOUD_BUILD_OUTPUT_DIR'] = '/fai/output'
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         output_base = self.output / self.name
         output_tmp = output_base / 'tmp'
         output_tarzst_root = output_tmp / 'rootfs.data.root.tar.zst'

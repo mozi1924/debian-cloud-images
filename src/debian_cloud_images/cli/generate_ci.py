@@ -131,7 +131,7 @@ class GenerateCiCommand(BaseCommand):
 
         return enable, enable_upload, upload_group
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         out: dict[str, typing.Any] = {}
 
         for vendor_name, vendor in self.config_image.vendors.items():

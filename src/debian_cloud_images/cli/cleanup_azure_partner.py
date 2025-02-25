@@ -92,7 +92,7 @@ class CleanupAzurePartnerlegacyCommand(BaseCommand):
         else:
             self.delete_date_storage = None
 
-    def __call__(self):
+    async def __call__(self):
         partner_conn = AzureGenericOAuth2Connection(
             client_id=self._client_id,
             client_secret=self._client_secret,
