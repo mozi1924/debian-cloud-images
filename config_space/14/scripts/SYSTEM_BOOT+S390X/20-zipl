@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euE
+
+if ifclass BUILD_IMAGE; then
+  set -- $disklist
+  DEVICE="/dev/${1}"
+
+  $ROOTCMD zipl -V \
+    --target /boot \
+    --targetbase "$DEVICE" \
+    --targettype SCSI \
+    --targetblocksize 512 \
+    --targetoffset 8192 \
+    --image /boot/vmlinuz \
+    --ramdisk /boot/initrd.img \
+    --parameters "root=PARTUUID=${PARTUUID_ROOT} console=ttyS0"
+fi

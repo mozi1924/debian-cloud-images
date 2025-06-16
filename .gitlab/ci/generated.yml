@@ -676,6 +676,19 @@
       "CLOUD_VENDOR": "generic"
     }
   },
+  "generic forky s390x build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "s390x",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
   "generic sid amd64 build": {
     "extends": ".build",
     "rules": [
@@ -724,6 +737,19 @@
     ],
     "variables": {
       "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
+  "generic sid s390x build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "s390x",
       "CLOUD_RELEASE": "sid",
       "CLOUD_VENDOR": "generic"
     }
@@ -1209,6 +1235,19 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "nocloud forky s390x build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "s390x",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
   "nocloud sid amd64 build": {
     "extends": ".build",
     "rules": [
@@ -1257,6 +1296,19 @@
     ],
     "variables": {
       "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
+  "nocloud sid s390x build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "s390x",
       "CLOUD_RELEASE": "sid",
       "CLOUD_VENDOR": "nocloud"
     }

@@ -1,0 +1,2 @@
+do_symlinks = yes
+link_in_boot = yes
