@@ -55,7 +55,7 @@ releases:
   baseid: '13'
   faiClasses: [TRIXIE, LINUX_VERSION_BASE, EXTRAS]
   matches:
-  - matchArches: [amd64, arm64, ppc64el]
+  - matchArches: [amd64, arm64, ppc64el, riscv64]
 - name: sid
   basename: sid
   id: sid

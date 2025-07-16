@@ -1584,6 +1584,19 @@
       "CLOUD_VENDOR": "generic"
     }
   },
+  "generic trixie riscv64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
   "genericcloud bookworm amd64 build": {
     "extends": ".build",
     "rules": [
@@ -1987,6 +2000,19 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "nocloud trixie riscv64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
   "sid upload": {
     "extends": ".upload",
     "needs": [
@@ -2120,6 +2146,10 @@
         "optional": false
       },
       {
+        "job": "generic trixie riscv64 build",
+        "optional": false
+      },
+      {
         "job": "genericcloud trixie amd64 build",
         "optional": false
       },
@@ -2137,6 +2167,10 @@
       },
       {
         "job": "nocloud trixie ppc64el build",
+        "optional": false
+      },
+      {
+        "job": "nocloud trixie riscv64 build",
         "optional": false
       }
     ],
