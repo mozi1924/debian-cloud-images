@@ -587,10 +587,6 @@
         "optional": false
       },
       {
-        "job": "genericcloud bookworm ppc64el build",
-        "optional": false
-      },
-      {
         "job": "nocloud bookworm amd64 build",
         "optional": false
       },
@@ -668,10 +664,6 @@
         "optional": false
       },
       {
-        "job": "genericcloud bookworm-backports ppc64el build",
-        "optional": false
-      },
-      {
         "job": "nocloud bookworm-backports amd64 build",
         "optional": false
       },
@@ -738,10 +730,6 @@
       },
       {
         "job": "genericcloud bullseye arm64 build",
-        "optional": false
-      },
-      {
-        "job": "genericcloud bullseye ppc64el build",
         "optional": false
       },
       {
@@ -819,10 +807,6 @@
       },
       {
         "job": "genericcloud bullseye-backports arm64 build",
-        "optional": false
-      },
-      {
-        "job": "genericcloud bullseye-backports ppc64el build",
         "optional": false
       },
       {
@@ -1600,6 +1584,19 @@
       "CLOUD_VENDOR": "generic"
     }
   },
+  "generic trixie riscv64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
   "genericcloud bookworm amd64 build": {
     "extends": ".build",
     "rules": [
@@ -1622,19 +1619,6 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
-      "CLOUD_RELEASE": "bookworm",
-      "CLOUD_VENDOR": "genericcloud"
-    }
-  },
-  "genericcloud bookworm ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "if": "$PIPELINE_RELEASE_BOOKWORM"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
       "CLOUD_RELEASE": "bookworm",
       "CLOUD_VENDOR": "genericcloud"
     }
@@ -1665,19 +1649,6 @@
       "CLOUD_VENDOR": "genericcloud"
     }
   },
-  "genericcloud bookworm-backports ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "if": "$PIPELINE_RELEASE_BOOKWORM_BACKPORTS"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
-      "CLOUD_RELEASE": "bookworm-backports",
-      "CLOUD_VENDOR": "genericcloud"
-    }
-  },
   "genericcloud bullseye amd64 build": {
     "extends": ".build",
     "rules": [
@@ -1700,19 +1671,6 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
-      "CLOUD_RELEASE": "bullseye",
-      "CLOUD_VENDOR": "genericcloud"
-    }
-  },
-  "genericcloud bullseye ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "if": "$PIPELINE_RELEASE_BULLSEYE"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
       "CLOUD_RELEASE": "bullseye",
       "CLOUD_VENDOR": "genericcloud"
     }
@@ -1743,19 +1701,6 @@
       "CLOUD_VENDOR": "genericcloud"
     }
   },
-  "genericcloud bullseye-backports ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
-      "CLOUD_RELEASE": "bullseye-backports",
-      "CLOUD_VENDOR": "genericcloud"
-    }
-  },
   "genericcloud sid amd64 build": {
     "extends": ".build",
     "rules": [
@@ -1782,32 +1727,6 @@
       "CLOUD_VENDOR": "genericcloud"
     }
   },
-  "genericcloud sid ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "if": "$PIPELINE_RELEASE_SID"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
-      "CLOUD_RELEASE": "sid",
-      "CLOUD_VENDOR": "genericcloud"
-    }
-  },
-  "genericcloud sid riscv64 build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "if": "$PIPELINE_RELEASE_SID"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "riscv64",
-      "CLOUD_RELEASE": "sid",
-      "CLOUD_VENDOR": "genericcloud"
-    }
-  },
   "genericcloud trixie amd64 build": {
     "extends": ".build",
     "rules": [
@@ -1830,19 +1749,6 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
-      "CLOUD_RELEASE": "trixie",
-      "CLOUD_VENDOR": "genericcloud"
-    }
-  },
-  "genericcloud trixie ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "if": "$PIPELINE_RELEASE_TRIXIE"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
       "CLOUD_RELEASE": "trixie",
       "CLOUD_VENDOR": "genericcloud"
     }
@@ -2094,6 +2000,19 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "nocloud trixie riscv64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
   "sid upload": {
     "extends": ".upload",
     "needs": [
@@ -2151,14 +2070,6 @@
       },
       {
         "job": "genericcloud sid arm64 build",
-        "optional": false
-      },
-      {
-        "job": "genericcloud sid ppc64el build",
-        "optional": false
-      },
-      {
-        "job": "genericcloud sid riscv64 build",
         "optional": false
       },
       {
@@ -2235,15 +2146,15 @@
         "optional": false
       },
       {
+        "job": "generic trixie riscv64 build",
+        "optional": false
+      },
+      {
         "job": "genericcloud trixie amd64 build",
         "optional": false
       },
       {
         "job": "genericcloud trixie arm64 build",
-        "optional": false
-      },
-      {
-        "job": "genericcloud trixie ppc64el build",
         "optional": false
       },
       {
@@ -2256,6 +2167,10 @@
       },
       {
         "job": "nocloud trixie ppc64el build",
+        "optional": false
+      },
+      {
+        "job": "nocloud trixie riscv64 build",
         "optional": false
       }
     ],
