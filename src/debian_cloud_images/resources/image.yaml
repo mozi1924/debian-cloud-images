@@ -27,14 +27,14 @@ releases:
   baseid: '11'
   faiClasses: [BULLSEYE, LINUX_VERSION_BASE, EXTRAS]
   matches:
-  - matchArches: [amd64, arm64, ppc64el]
+  - matchArches: [amd64, arm64]
 - name: bullseye-backports
   basename: bullseye-backports
   id: 11-backports
   baseid: '11'
   faiClasses: [BULLSEYE, LINUX_VERSION_BACKPORTS, EXTRAS]
   matches:
-  - matchArches: [amd64, arm64, ppc64el]
+  - matchArches: [amd64, arm64]
 - name: bookworm
   basename: bookworm
   id: '12'
