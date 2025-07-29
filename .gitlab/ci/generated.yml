@@ -468,19 +468,6 @@
       "CLOUD_VENDOR": "generic"
     }
   },
-  "generic bullseye ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "when": "manual"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
-      "CLOUD_RELEASE": "bullseye",
-      "CLOUD_VENDOR": "generic"
-    }
-  },
   "generic bullseye-backports amd64 build": {
     "extends": ".build",
     "rules": [
@@ -503,19 +490,6 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
-      "CLOUD_RELEASE": "bullseye-backports",
-      "CLOUD_VENDOR": "generic"
-    }
-  },
-  "generic bullseye-backports ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "when": "manual"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
       "CLOUD_RELEASE": "bullseye-backports",
       "CLOUD_VENDOR": "generic"
     }
@@ -884,19 +858,6 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
-  "nocloud bullseye ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "when": "manual"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
-      "CLOUD_RELEASE": "bullseye",
-      "CLOUD_VENDOR": "nocloud"
-    }
-  },
   "nocloud bullseye-backports amd64 build": {
     "extends": ".build",
     "rules": [
@@ -919,19 +880,6 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
-      "CLOUD_RELEASE": "bullseye-backports",
-      "CLOUD_VENDOR": "nocloud"
-    }
-  },
-  "nocloud bullseye-backports ppc64el build": {
-    "extends": ".build",
-    "rules": [
-      {
-        "when": "manual"
-      }
-    ],
-    "variables": {
-      "CLOUD_ARCH": "ppc64el",
       "CLOUD_RELEASE": "bullseye-backports",
       "CLOUD_VENDOR": "nocloud"
     }
