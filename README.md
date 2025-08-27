@@ -11,8 +11,8 @@ the recommends (which avoids turning your host into a DHCP server!).
 ```
   # git clone https://salsa.debian.org/cloud-team/debian-cloud-images.git
   # sudo apt install --no-install-recommends ca-certificates debsums dosfstools \
-    fai-server fai-setup-storage fdisk make python3 python3-libcloud python3-marshmallow \
-    python3-pytest python3-yaml qemu-utils udev
+    fai-server fai-setup-storage fdisk make python3 python3-httpx python3-libcloud \
+    python3-marshmallow python3-pytest python3-yaml qemu-utils udev
 ```
 
   Call `make help` and follow the instructions
