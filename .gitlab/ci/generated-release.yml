@@ -182,11 +182,22 @@
       {
         "job": "azure trixie arm64 upload",
         "optional": true
+      },
+      {
+        "job": "azure trixie-backports amd64 upload",
+        "optional": true
+      },
+      {
+        "job": "azure trixie-backports arm64 upload",
+        "optional": true
       }
     ],
     "rules": [
       {
         "if": "$PIPELINE_RELEASE_TRIXIE"
+      },
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
       }
     ],
     "variables": {
@@ -221,6 +232,38 @@
     "variables": {
       "CLOUD_ARCH": "arm64",
       "CLOUD_RELEASE": "trixie",
+      "CLOUD_UPLOAD_GROUP": "debian-13",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure trixie-backports amd64 upload": {
+    "extends": ".azure upload",
+    "needs": [],
+    "resource_group": "azure group-debian-13 upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "trixie-backports",
+      "CLOUD_UPLOAD_GROUP": "debian-13",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure trixie-backports arm64 upload": {
+    "extends": ".azure upload",
+    "needs": [],
+    "resource_group": "azure group-debian-13 upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie-backports",
       "CLOUD_UPLOAD_GROUP": "debian-13",
       "CLOUD_VENDOR": "azure"
     }
@@ -491,6 +534,14 @@
       {
         "job": "ec2 trixie arm64 upload",
         "optional": true
+      },
+      {
+        "job": "ec2 trixie-backports amd64 upload",
+        "optional": true
+      },
+      {
+        "job": "ec2 trixie-backports arm64 upload",
+        "optional": true
       }
     ],
     "rules": [
@@ -508,6 +559,9 @@
       },
       {
         "if": "$PIPELINE_RELEASE_TRIXIE"
+      },
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
       }
     ],
     "variables": {}
@@ -540,6 +594,34 @@
       "CLOUD_VENDOR": "ec2"
     }
   },
+  "ec2 trixie-backports amd64 upload": {
+    "extends": ".ec2 upload",
+    "needs": [],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "trixie-backports",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
+  "ec2 trixie-backports arm64 upload": {
+    "extends": ".ec2 upload",
+    "needs": [],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie-backports",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
   "trixie upload": {
     "extends": ".upload",
     "needs": [
@@ -567,6 +649,35 @@
     ],
     "variables": {
       "CLOUD_RELEASE": "trixie"
+    }
+  },
+  "trixie-backports upload": {
+    "extends": ".upload",
+    "needs": [
+      {
+        "job": "azure trixie-backports amd64 upload",
+        "optional": false
+      },
+      {
+        "job": "azure trixie-backports arm64 upload",
+        "optional": false
+      },
+      {
+        "job": "ec2 trixie-backports amd64 upload",
+        "optional": false
+      },
+      {
+        "job": "ec2 trixie-backports arm64 upload",
+        "optional": false
+      }
+    ],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_RELEASE": "trixie-backports"
     }
   }
 }

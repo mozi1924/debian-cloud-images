@@ -56,6 +56,13 @@ releases:
   faiClasses: [TRIXIE, LINUX_VERSION_BASE, EXTRAS]
   matches:
   - matchArches: [amd64, arm64, ppc64el, riscv64]
+- name: trixie-backports
+  basename: trixie-backports
+  id: 13-backports
+  baseid: '13'
+  faiClasses: [TRIXIE, LINUX_VERSION_BACKPORTS, EXTRAS]
+  matches:
+  - matchArches: [amd64, arm64, ppc64el]
 - name: sid
   basename: sid
   id: sid
