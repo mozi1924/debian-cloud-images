@@ -35,8 +35,3 @@ chrony
 
 PACKAGES install-norec TIME_SYSTEMD
 systemd-timesyncd
-
-# Remove libnss-resolve per:
-# https://lists.debian.org/debian-cloud/2024/03/msg00018.html
-PACKAGES remove BOOKWORM BOOKWORM_BACKPORTS
-libnss-resolve
