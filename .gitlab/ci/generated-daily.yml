@@ -175,6 +175,76 @@
       "CLOUD_VENDOR": "azure"
     }
   },
+  "azure bullseye-backports amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_UPLOAD_GROUP": "debian-11-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure bullseye-backports amd64 upload": {
+    "extends": ".azure upload",
+    "needs": [
+      {
+        "job": "azure bullseye-backports amd64 build",
+        "optional": false
+      }
+    ],
+    "resource_group": "azure group-debian-11-daily upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_UPLOAD_GROUP": "debian-11-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure bullseye-backports arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_UPLOAD_GROUP": "debian-11-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure bullseye-backports arm64 upload": {
+    "extends": ".azure upload",
+    "needs": [
+      {
+        "job": "azure bullseye-backports arm64 build",
+        "optional": false
+      }
+    ],
+    "resource_group": "azure group-debian-11-daily upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_UPLOAD_GROUP": "debian-11-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
   "azure group-debian-11-daily postupload": {
     "extends": ".azure postupload",
     "needs": [
@@ -185,11 +255,30 @@
       {
         "job": "azure bullseye amd64 upload",
         "optional": true
+      },
+      {
+        "job": "azure bullseye-backports amd64 build",
+        "optional": false
+      },
+      {
+        "job": "azure bullseye-backports amd64 upload",
+        "optional": true
+      },
+      {
+        "job": "azure bullseye-backports arm64 build",
+        "optional": false
+      },
+      {
+        "job": "azure bullseye-backports arm64 upload",
+        "optional": true
       }
     ],
     "rules": [
       {
         "if": "$PIPELINE_RELEASE_BULLSEYE"
+      },
+      {
+        "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
       }
     ],
     "variables": {
@@ -749,6 +838,22 @@
   "bullseye-backports upload": {
     "extends": ".upload",
     "needs": [
+      {
+        "job": "azure bullseye-backports amd64 build",
+        "optional": false
+      },
+      {
+        "job": "azure bullseye-backports amd64 upload",
+        "optional": false
+      },
+      {
+        "job": "azure bullseye-backports arm64 build",
+        "optional": false
+      },
+      {
+        "job": "azure bullseye-backports arm64 upload",
+        "optional": false
+      },
       {
         "job": "ec2 bullseye-backports amd64 build",
         "optional": false

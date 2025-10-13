@@ -119,7 +119,7 @@ publicTypes:
 - name: daily
   matches:
   - matchVendors: [azure]
-    matchReleases: [bullseye]
+    matchReleases: [bullseye, bullseye-backports]
     uploadGroup: debian-11-daily
     op: EnableUpload
   - matchVendors: [azure]
@@ -142,7 +142,7 @@ publicTypes:
   - matchReleases: [sid]
     op: Disable
   - matchVendors: [azure]
-    matchReleases: [bullseye]
+    matchReleases: [bullseye, bullseye-backports]
     uploadGroup: debian-11
     op: EnableUpload
   - matchVendors: [azure]
