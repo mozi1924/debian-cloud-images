@@ -245,6 +245,76 @@
       "CLOUD_VENDOR": "azure"
     }
   },
+  "azure forky amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_UPLOAD_GROUP": "debian-14-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure forky amd64 upload": {
+    "extends": ".azure upload",
+    "needs": [
+      {
+        "job": "azure forky amd64 build",
+        "optional": false
+      }
+    ],
+    "resource_group": "azure group-debian-14-daily upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_UPLOAD_GROUP": "debian-14-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_UPLOAD_GROUP": "debian-14-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure forky arm64 upload": {
+    "extends": ".azure upload",
+    "needs": [
+      {
+        "job": "azure forky arm64 build",
+        "optional": false
+      }
+    ],
+    "resource_group": "azure group-debian-14-daily upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_UPLOAD_GROUP": "debian-14-daily",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
   "azure group-debian-11-daily postupload": {
     "extends": ".azure postupload",
     "needs": [
@@ -379,6 +449,35 @@
     ],
     "variables": {
       "CLOUD_UPLOAD_GROUP": "debian-13-daily"
+    }
+  },
+  "azure group-debian-14-daily postupload": {
+    "extends": ".azure postupload",
+    "needs": [
+      {
+        "job": "azure forky amd64 build",
+        "optional": false
+      },
+      {
+        "job": "azure forky amd64 upload",
+        "optional": true
+      },
+      {
+        "job": "azure forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "azure forky arm64 upload",
+        "optional": true
+      }
+    ],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_UPLOAD_GROUP": "debian-14-daily"
     }
   },
   "azure group-debian-sid-daily postupload": {
@@ -1160,6 +1259,70 @@
       "CLOUD_VENDOR": "ec2"
     }
   },
+  "ec2 forky amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
+  "ec2 forky amd64 upload": {
+    "extends": ".ec2 upload",
+    "needs": [
+      {
+        "job": "ec2 forky amd64 build",
+        "optional": false
+      }
+    ],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
+  "ec2 forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
+  "ec2 forky arm64 upload": {
+    "extends": ".ec2 upload",
+    "needs": [
+      {
+        "job": "ec2 forky arm64 build",
+        "optional": false
+      }
+    ],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
   "ec2 postupload": {
     "extends": ".ec2 postupload",
     "needs": [
@@ -1228,6 +1391,22 @@
         "optional": true
       },
       {
+        "job": "ec2 forky amd64 build",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky amd64 upload",
+        "optional": true
+      },
+      {
+        "job": "ec2 forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky arm64 upload",
+        "optional": true
+      },
+      {
         "job": "ec2 sid amd64 build",
         "optional": false
       },
@@ -1288,6 +1467,9 @@
       },
       {
         "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
+      },
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
       },
       {
         "if": "$PIPELINE_RELEASE_SID"
@@ -1493,6 +1675,91 @@
       "CLOUD_VENDOR": "ec2"
     }
   },
+  "forky upload": {
+    "extends": ".upload",
+    "needs": [
+      {
+        "job": "azure forky amd64 build",
+        "optional": false
+      },
+      {
+        "job": "azure forky amd64 upload",
+        "optional": false
+      },
+      {
+        "job": "azure forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "azure forky arm64 upload",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky amd64 build",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky amd64 upload",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky arm64 upload",
+        "optional": false
+      },
+      {
+        "job": "generic forky amd64 build",
+        "optional": false
+      },
+      {
+        "job": "generic forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "generic forky ppc64el build",
+        "optional": false
+      },
+      {
+        "job": "generic forky riscv64 build",
+        "optional": false
+      },
+      {
+        "job": "genericcloud forky amd64 build",
+        "optional": false
+      },
+      {
+        "job": "genericcloud forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "nocloud forky amd64 build",
+        "optional": false
+      },
+      {
+        "job": "nocloud forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "nocloud forky ppc64el build",
+        "optional": false
+      },
+      {
+        "job": "nocloud forky riscv64 build",
+        "optional": false
+      }
+    ],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_RELEASE": "forky"
+    }
+  },
   "generic bookworm amd64 build": {
     "extends": ".build",
     "rules": [
@@ -1620,6 +1887,58 @@
     "variables": {
       "CLOUD_ARCH": "arm64",
       "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
+  "generic forky amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
+  "generic forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
+  "generic forky ppc64el build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "ppc64el",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
+  "generic forky riscv64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "forky",
       "CLOUD_VENDOR": "generic"
     }
   },
@@ -1870,6 +2189,32 @@
       "CLOUD_VENDOR": "genericcloud"
     }
   },
+  "genericcloud forky amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "genericcloud"
+    }
+  },
+  "genericcloud forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "genericcloud"
+    }
+  },
   "genericcloud sid amd64 build": {
     "extends": ".build",
     "rules": [
@@ -2075,6 +2420,58 @@
     "variables": {
       "CLOUD_ARCH": "arm64",
       "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
+  "nocloud forky amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
+  "nocloud forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
+  "nocloud forky ppc64el build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "ppc64el",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
+  "nocloud forky riscv64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "riscv64",
+      "CLOUD_RELEASE": "forky",
       "CLOUD_VENDOR": "nocloud"
     }
   },
@@ -2473,6 +2870,7 @@
     "PIPELINE_RELEASE_BOOKWORM_BACKPORTS": "1",
     "PIPELINE_RELEASE_BULLSEYE": "1",
     "PIPELINE_RELEASE_BULLSEYE_BACKPORTS": "1",
+    "PIPELINE_RELEASE_FORKY": "1",
     "PIPELINE_RELEASE_SID": "1",
     "PIPELINE_RELEASE_TRIXIE": "1",
     "PIPELINE_RELEASE_TRIXIE_BACKPORTS": "1"
