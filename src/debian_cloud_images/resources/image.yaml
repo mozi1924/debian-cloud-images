@@ -63,6 +63,13 @@ releases:
   faiClasses: [TRIXIE, LINUX_VERSION_BACKPORTS, EXTRAS]
   matches:
   - matchArches: [amd64, arm64, ppc64el]
+- name: forky
+  basename: forky
+  id: '14'
+  baseid: '14'
+  faiClasses: [FORKY, LINUX_VERSION_BASE, EXTRAS]
+  matches:
+  - matchArches: [amd64, arm64, ppc64el, riscv64]
 - name: sid
   basename: sid
   id: sid
@@ -131,6 +138,10 @@ publicTypes:
     uploadGroup: debian-13-daily
     op: EnableUpload
   - matchVendors: [azure]
+    matchReleases: [forky, forky-backports]
+    uploadGroup: debian-14-daily
+    op: EnableUpload
+  - matchVendors: [azure]
     matchReleases: [sid]
     uploadGroup: debian-sid-daily
     op: EnableUpload
@@ -152,6 +163,10 @@ publicTypes:
   - matchVendors: [azure]
     matchReleases: [trixie, trixie-backports]
     uploadGroup: debian-13
+    op: EnableUpload
+  - matchVendors: [azure]
+    matchReleases: [forky, forky-backports]
+    uploadGroup: debian-14
     op: EnableUpload
   - matchVendors: [ec2]
     op: EnableUpload

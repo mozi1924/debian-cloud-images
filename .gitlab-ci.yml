@@ -74,6 +74,10 @@ test python trixie:
   extends: .test python
   image: debian:trixie
 
+test python forky:
+  extends: .test python
+  image: debian:forky
+
 test python latest:
   stage: source test
   image: python:slim
@@ -103,7 +107,7 @@ test python latest:
 
 .build:
   stage: build
-  image: debian:bookworm
+  image: debian:trixie
   script:
     - |
       if [ "$CI_DISPOSABLE_ENVIRONMENT" ]; then

@@ -112,6 +112,38 @@
       "CLOUD_VENDOR": "azure"
     }
   },
+  "azure forky amd64 upload": {
+    "extends": ".azure upload",
+    "needs": [],
+    "resource_group": "azure group-debian-14 upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_UPLOAD_GROUP": "debian-14",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
+  "azure forky arm64 upload": {
+    "extends": ".azure upload",
+    "needs": [],
+    "resource_group": "azure group-debian-14 upload",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_UPLOAD_GROUP": "debian-14",
+      "CLOUD_VENDOR": "azure"
+    }
+  },
   "azure group-debian-11 postupload": {
     "extends": ".azure postupload",
     "needs": [
@@ -202,6 +234,27 @@
     ],
     "variables": {
       "CLOUD_UPLOAD_GROUP": "debian-13"
+    }
+  },
+  "azure group-debian-14 postupload": {
+    "extends": ".azure postupload",
+    "needs": [
+      {
+        "job": "azure forky amd64 upload",
+        "optional": true
+      },
+      {
+        "job": "azure forky arm64 upload",
+        "optional": true
+      }
+    ],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_UPLOAD_GROUP": "debian-14"
     }
   },
   "azure trixie amd64 upload": {
@@ -492,6 +545,34 @@
       "CLOUD_VENDOR": "ec2"
     }
   },
+  "ec2 forky amd64 upload": {
+    "extends": ".ec2 upload",
+    "needs": [],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
+  "ec2 forky arm64 upload": {
+    "extends": ".ec2 upload",
+    "needs": [],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "ec2"
+    }
+  },
   "ec2 postupload": {
     "extends": ".ec2 postupload",
     "needs": [
@@ -528,6 +609,14 @@
         "optional": true
       },
       {
+        "job": "ec2 forky amd64 upload",
+        "optional": true
+      },
+      {
+        "job": "ec2 forky arm64 upload",
+        "optional": true
+      },
+      {
         "job": "ec2 trixie amd64 upload",
         "optional": true
       },
@@ -556,6 +645,9 @@
       },
       {
         "if": "$PIPELINE_RELEASE_BULLSEYE_BACKPORTS"
+      },
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
       },
       {
         "if": "$PIPELINE_RELEASE_TRIXIE"
@@ -620,6 +712,35 @@
       "CLOUD_ARCH": "arm64",
       "CLOUD_RELEASE": "trixie-backports",
       "CLOUD_VENDOR": "ec2"
+    }
+  },
+  "forky upload": {
+    "extends": ".upload",
+    "needs": [
+      {
+        "job": "azure forky amd64 upload",
+        "optional": false
+      },
+      {
+        "job": "azure forky arm64 upload",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky amd64 upload",
+        "optional": false
+      },
+      {
+        "job": "ec2 forky arm64 upload",
+        "optional": false
+      }
+    ],
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_RELEASE": "forky"
     }
   },
   "trixie upload": {
