@@ -28,5 +28,5 @@ EOF
 partprobe "$device"
 
 wait_for_device "$device_root"
-mkfs.ext4 -U "$FSUUID_ROOT" "$device_root"
+mkfs.ext4 -O none,sparse_super,large_file,filetype,resize_inode,dir_index,ext_attr,has_journal,extent,huge_file,flex_bg,metadata_csum,metadata_csum_seed,64bit,dir_nlink,extra_isize,orphan_file -U "$FSUUID_ROOT" "$device_root"
 tune2fs -c 0 -i 0 "$device_root"
