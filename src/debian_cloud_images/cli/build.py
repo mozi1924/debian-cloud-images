@@ -259,7 +259,7 @@ class BuildCommand(BaseCommand):
 
             self.fai = RunFAI(
                 output_filename=image_raw,
-                release=self.c.release.basename,
+                release=self.c.release.baseid,
                 classes=self.c.classes,
                 size_gb=self.c.vendor.size,
                 env=self.env,

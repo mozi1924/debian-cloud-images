@@ -288,7 +288,7 @@ class BuildCommand(BaseCommand):
         oci = OciImage(output_base)
 
         with importlib.resources.as_file(
-            importlib.resources.files(resources) / 'fai_config' / self.c.release.basename
+            importlib.resources.files(resources) / 'fai_config' / self.c.release.baseid
         ) as p_fai_config:
             output_tmp.mkdir(parents=True, exist_ok=True)
             output_log.mkdir(parents=True, exist_ok=True)
