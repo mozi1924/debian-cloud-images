@@ -33,6 +33,8 @@ elif ifclass PPC64EL; then
 elif ifclass RISCV64; then
   mkdir -p "$FAI_ROOT"/boot/efi
   grub_install riscv64-efi
+else
+  exit 1
 fi
 
 if ifclass BUILD_IMAGE; then

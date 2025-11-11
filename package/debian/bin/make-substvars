@@ -30,7 +30,7 @@ for i in pathlib.Path('../config_space/sid/package_config').glob('*'):
     if '.' in i.name or i.name in class_exclude:
         continue
 
-    arch = class_arch.get(i.name)
+    arch = class_arch.get(i.name.split('+')[-1])
 
     with i.open() as f:
         for line in f.readlines():
