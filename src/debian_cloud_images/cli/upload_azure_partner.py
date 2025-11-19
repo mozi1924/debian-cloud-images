@@ -144,6 +144,9 @@ class UploadAzurePartnerlegacyCommand(UploadBaseCommand):
 
             if self._partner_plan_override is not None:
                 image_plan = self._partner_plan_override
+            elif self.image.build_info['release_id'] == "11-backports" and self.image.build_info['arch'] == "arm64":
+                # XXX Remove this elif block when we're not longer publishing bullseye
+                image_plan = "11-backports-arm64-v2"
             else:
                 image_plan = self.image.build_info['release_id']
 
