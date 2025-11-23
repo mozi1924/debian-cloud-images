@@ -15,22 +15,27 @@ class_exclude = {
 }
 
 class_arch = {
-    'AMD64': 'amd64',
-    'ARM64': 'arm64',
-    'AZURE': 'amd64 arm64',
-    'EC2': 'amd64 arm64',
-    'GCE': 'amd64 arm64',
-    'PPC64EL': 'ppc64el',
-    'RISCV64': 'riscv64',
+    'AMD64': {'amd64'},
+    'ARM64': {'arm64'},
+    'AZURE': {'amd64', 'arm64'},
+    'EC2': {'amd64', 'arm64'},
+    'GCE': {'amd64', 'arm64'},
+    'PPC64EL': {'ppc64el'},
+    'RISCV64': {'riscv64'},
+    'S390X': {'s390x'},
 }
 
 packages = set()
 
 for i in pathlib.Path('../config_space/sid/package_config').glob('*'):
-    if '.' in i.name or i.name in class_exclude:
+    classes = set(i.name.split('+'))
+
+    if '.' in i.name or classes & class_exclude:
         continue
 
-    arch = class_arch.get(i.name)
+    arches = set()
+    for c in classes:
+        arches |= class_arch.get(c, set())
 
     with i.open() as f:
         for line in f.readlines():
@@ -57,8 +62,8 @@ for i in pathlib.Path('../config_space/sid/package_config').glob('*'):
                     # https://piuparts.debian.org/sid/fail/debian-cloud-images-packages_0.0.5.log
                     if package == 'init':
                         continue
-                    if arch:
-                        packages.add(f'{package} [{arch}]')
+                    if arches:
+                        packages.add(f'{package} [{" ".join(sorted(arches))}]')
                     else:
                         packages.add(package)
 

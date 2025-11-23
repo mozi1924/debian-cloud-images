@@ -19,6 +19,9 @@ archs:
 - name: riscv64
   faiClasses: [RISCV64]
   ociArch: riscv64
+- name: s390x
+  faiClasses: [S390X]
+  ociArch: s390x
 
 releases:
 - name: bullseye
@@ -68,8 +71,6 @@ releases:
   id: '14'
   baseid: '14'
   faiClasses: [FORKY, LINUX_VERSION_BASE, EXTRAS]
-  matches:
-  - matchArches: [amd64, arm64, ppc64el, riscv64]
 - name: sid
   basename: sid
   id: sid
@@ -105,7 +106,7 @@ vendors:
   faiClasses: [SYSTEM_BOOT, CLOUD, GENERIC, LINUX_VARIANT_CLOUD, TIME_SYSTEMD]
   size: 3
   matches:
-    - matchArches: [amd64, arm64]
+  - matchArches: [amd64, arm64]
 - name: nocloud
   faiClasses: [SYSTEM_BOOT, NOCLOUD, LINUX_VARIANT_BASE, TIME_SYSTEMD]
   size: 3

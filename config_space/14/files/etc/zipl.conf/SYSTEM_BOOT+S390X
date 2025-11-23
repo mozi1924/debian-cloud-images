@@ -1,0 +1,21 @@
+[defaultboot]
+defaultmenu = menu
+
+[linux]
+target = /boot
+image = /boot/vmlinuz
+parameters = "root=PARTUUID={%PARTUUID_ROOT%} console=ttyS0"
+
+[old]
+target = /boot
+image = /boot/vmlinuz.old
+parameters = "root=PARTUUID={%PARTUUID_ROOT%} console=ttyS0"
+
+:menu
+target = /boot
+1 = linux
+2 = old
+default = 1
+prompt = 1
+timeout = 0
+secure = auto
