@@ -111,7 +111,8 @@ class AzureBase(AzureBaseClient[Parent]):
         start_time = time.time()
 
         while time.time() - start_time < timeout:
-            state = cast(str, self._do_get()['properties']['provisioningState']).lower()
+            properties = cast(JSONObject, self._do_get()['properties'])
+            state = cast(str, properties['provisioningState']).lower()
             logging.debug('Privisioning state of resource: %s', state)
 
             if state == 'succeeded':

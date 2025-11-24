@@ -66,10 +66,6 @@ test package:
     --color=yes
     tests
 
-test python bookworm:
-  extends: .test python
-  image: debian:bookworm
-
 test python trixie:
   extends: .test python
   image: debian:trixie
