@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euEx
+
+sed -i -Ee "s|^#?ROOTPART=.*|ROOTPART=PARTUUID=${PARTUUID_ROOT}|" $FAI_ROOT/etc/default/raspi-firmware

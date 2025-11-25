@@ -11,7 +11,11 @@ device_root="${device}p1"
 device_efi="${device}p15"
 
 mount -o noatime -o "$options" "$device_root" "$FAI_ROOT"
-if ifclass -o AMD64 ARM64 RISCV64; then
+if ifclass SYSTEM_BOOT_DEFAULT && ifclass -o AMD64 ARM64 RISCV64; then
   mkdir -p "${FAI_ROOT}/boot/efi"
   mount -o noatime -o "$options" "$device_efi" "${FAI_ROOT}/boot/efi"
+fi
+if ifclass -o SYSTEM_BOOT_RASPI; then
+  mkdir -p "${FAI_ROOT}/boot/firmware"
+  mount -o noatime -o "$options" "$device_efi" "${FAI_ROOT}/boot/firmware"
 fi
