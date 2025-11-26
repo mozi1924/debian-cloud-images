@@ -19,6 +19,7 @@ class TestEtc:
         assert p.is_file()
         assert not p.is_symlink()
 
+    @pytest.mark.skip(reason='Using systemd-resolved')
     def test_etc_resolv_conf(self, image_path):
         p = image_path / 'etc' / 'resolv.conf'
         assert not p.exists() or p.is_symlink(), '/etc/resolv.conf does exist and is not a symlink'
