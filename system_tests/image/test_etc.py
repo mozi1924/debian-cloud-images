@@ -47,16 +47,25 @@ class TestEtc:
             'root', 'daemon', 'bin', 'sys', 'adm', 'tty', 'disk', 'lp', 'mail',
             'news', 'uucp', 'man', 'proxy', 'kmem', 'dialout', 'fax', 'voice',
             'cdrom', 'floppy', 'tape', 'sudo', 'audio', 'dip', 'www-data',
-            'backup', 'operator', 'list', 'irc', 'src', 'shadow', 'utmp',
-            'video', 'sasl', 'plugdev', 'staff', 'games', 'users', 'nogroup',
+            'backup', 'operator', 'list', 'irc', 'src', 'gnats', 'shadow',
+            'utmp', 'video', 'sasl', 'plugdev', 'staff', 'games', 'users',
+            'nogroup',
+            # From package cron
+            'crontab',
             # From package dbus
             'messagebus',
+            # From package dhcpcd-base
+            'dhcpcd',
+            # From package ifupdown
+            'netdev',
             # From package polkit
             'polkitd',
+            # From package openssh-client
+            'ssh',
             # From package tcpdump
             'tcpdump',
             # From package udev
-            'input', 'kvm', 'render', 'sgx',
+            'clock', 'input', 'kvm', 'render', 'sgx',
             # From package uuid-runtime
             'uuidd',
         ):
@@ -90,6 +99,8 @@ class TestEtc:
             'irc', 'gnats', 'nobody',
             # From package dbus
             'messagebus',
+            # From package dhcpcd-base
+            'dhcpcd',
             # From package polkit
             'polkitd',
             # From package openssh-server
