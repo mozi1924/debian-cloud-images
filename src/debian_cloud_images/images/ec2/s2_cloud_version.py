@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 import collections.abc
-import libcloud
 import logging
 import re
 import typing
@@ -10,6 +9,7 @@ from os import getenv
 from time import sleep
 from .info import Ec2Info
 from ...utils.image_version import ImageVersion
+from libcloud.common.exceptions import BaseHTTPError
 
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class StepCloudVersion:
         retry_codes = re.compile("ServerInternal|InternalFailure|RequestLimitExceeded|InternalError")
         try:
             image.driver.delete_image(image)
-        except libcloud.common.exceptions.BaseHTTPError as e:
+        except BaseHTTPError as e:
             if tries_remaining <= 0:
                 raise e
             elif retry_codes.match(e.args[0]):
@@ -57,7 +57,7 @@ class StepCloudVersion:
         retry_codes = re.compile("ServerInternal|InternalFailure|RequestLimitExceeded|InternalError")
         try:
             snapshot.driver.destroy_volume_snapshot(snapshot)
-        except libcloud.common.exceptions.BaseHTTPError as e:
+        except BaseHTTPError as e:
             if tries_remaining <= 0:
                 raise e
             elif retry_codes.match(e.args[0]):
@@ -81,7 +81,7 @@ class StepCloudVersion:
                 logger.debug(f'Deleting snapshot {snapshot.id} for image {image_name} from region {region}')
                 try:
                     self._delete_snapshot(snapshot)
-                except libcloud.common.exceptions.BaseHTTPError as e:
+                except BaseHTTPError as e:
                     if e.args[0].find('InvalidSnapshot.') != -1:
                         logging.warning(f'Skipping snapshot deletion: {e}')
                     else:
