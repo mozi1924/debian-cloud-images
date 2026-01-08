@@ -163,7 +163,7 @@ class UploadAzureComputegalleryCommand(UploadBaseCommand):
 
                 computegallery_image = AzureComputegalleryImage(
                     computegallery,
-                    self._computegallery,
+                    self.computegallery_image,
                 )
 
                 computegallery_image_arch = AzureVmArch(computegallery_image.properties()['architecture'])
