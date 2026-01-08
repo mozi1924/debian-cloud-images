@@ -28,6 +28,10 @@ class TestBootFiles:
     def test_boot_grub_i386_pc(self, image_path):
         self.check_dir_exist(image_path, '/boot/grub/i386-pc')
 
+    @pytest.mark.build_arch('loong64')
+    def test_boot_grub_loongarch64_efi(self, image_path):
+        self.check_dir_exist(image_path, '/boot/grub/loongarch64-efi')
+
     @pytest.mark.build_arch('ppc64el')
     def test_boot_grub_powerpc_ieee1275(self, image_path):
         self.check_dir_exist(image_path, '/boot/grub/powerpc-ieee1275')
