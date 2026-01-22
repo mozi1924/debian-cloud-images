@@ -21,7 +21,7 @@ label: gpt
 unit: sectors
 
 # Raspberry PI firmware
-p15 : start=2048, size=1046528, type="BIOS boot", uuid=${PARTUUID_ESP}
+p15 : start=2048, size=1046528, type="EFI System", uuid=${PARTUUID_ESP}
 # Linux
 p1 : start=1048576, type="Linux root (ARM-64)", uuid=${PARTUUID_ROOT}
 EOF
