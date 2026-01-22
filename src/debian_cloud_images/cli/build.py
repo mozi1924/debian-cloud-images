@@ -59,9 +59,9 @@ class Classes(collections.abc.MutableSet):
         new = []
         for other in others:
             for o in other:
+                new.append(o)
                 for i in self.__data:
                     new.append('+'.join((i, o)))
-                new.append(o)
         self.__data.extend(new)
 
 

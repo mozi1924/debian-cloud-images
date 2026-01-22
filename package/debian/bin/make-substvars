@@ -11,6 +11,7 @@ class_exclude = {
     'DEVEL',
     'GCE',
     'GCE_SDK',
+    'SYSTEM_BOOT_RASPI', # packages from non-free-firmware
     'TIME_SYSTEMD', # chrony and systemd-timesyncd conflict
 }
 
