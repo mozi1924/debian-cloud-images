@@ -154,7 +154,7 @@ publicTypes:
     op: EnableUpload
   - matchVendors: [ec2]
     op: EnableUpload
-  - matchVendors: [generic, genericcloud, nocloud]
+  - matchVendors: [generic, genericcloud, nocloud, raspi]
 - name: release
   matches:
   - matchReleases: [sid]
