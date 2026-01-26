@@ -1757,6 +1757,10 @@
       {
         "job": "nocloud forky s390x build",
         "optional": false
+      },
+      {
+        "job": "raspi forky arm64 build",
+        "optional": false
       }
     ],
     "rules": [
@@ -2678,6 +2682,32 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "raspi forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
+  "raspi sid arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_SID"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
   "sid upload": {
     "extends": ".upload",
     "needs": [
@@ -2759,6 +2789,10 @@
       },
       {
         "job": "nocloud sid s390x build",
+        "optional": false
+      },
+      {
+        "job": "raspi sid arm64 build",
         "optional": false
       }
     ],
