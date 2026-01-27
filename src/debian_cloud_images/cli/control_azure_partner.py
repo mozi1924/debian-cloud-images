@@ -32,6 +32,10 @@ cli_command = cli.register_subparsers(
             metavar='OFFER',
             required=True,
         ),
+        cli.prepare_argument(
+            '--no-op',
+            action='store_true',
+        ),
     ],
 )
 
@@ -41,12 +45,14 @@ class ControlAzurePartnerlegacyCommand(BaseCommand):
             self, *,
             partner_offer: str,
             slot: Optional[str] = None,
+            no_op: bool,
             **kw,
     ) -> None:
         super().__init__(**kw)
 
         self._partner_offer = partner_offer
         self._slot = slot
+        self.no_op = no_op
 
         self._client_id = str(self.config_get('azure.auth.client', default=None))
         self._client_secret = self.config_get('azure.auth.secret', default=None)
@@ -137,9 +143,10 @@ class ControlAzurePartnerlegacyCommandEdit(ControlAzurePartnerlegacyCommand):
     'golive',
     help='perform Go Live operation on Azure Partner offer',
 )
-class ControlAzurePartnerlegacyCommandGoline(ControlAzurePartnerlegacyCommand):
+class ControlAzurePartnerlegacyCommandGolive(ControlAzurePartnerlegacyCommand):
     def impl(self, partner_offer: ImagesAzurePartnerlegacyOffer) -> None:
-        partner_offer.control_golive()
+        if not self.no_op:
+            partner_offer.control_golive()
         print(f'Executed Go Live operation on: {self._partner_publisher}/{self._partner_offer}')
 
 
@@ -149,7 +156,8 @@ class ControlAzurePartnerlegacyCommandGoline(ControlAzurePartnerlegacyCommand):
 )
 class ControlAzurePartnerlegacyCommandPublish(ControlAzurePartnerlegacyCommand):
     def impl(self, partner_offer: ImagesAzurePartnerlegacyOffer) -> None:
-        partner_offer.control_publish()
+        if not self.no_op:
+            partner_offer.control_publish()
         print(f'Executed Publish operation on: {self._partner_publisher}/{self._partner_offer}')
 
 
