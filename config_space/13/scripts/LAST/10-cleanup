@@ -27,17 +27,29 @@ cleanup_files=(
 
 empty_files=(
   etc/hostname
-  etc/machine-id
   var/lib/dpkg/available
 )
 
+if ifclass NOCLOUD; then
+  cleanup_files+=(
+    etc/localtime
+    etc/vconsole.conf
+  )
+
+  echo "uninitialized" > "$FAI_ROOT"/etc/machine-id
+else
+  empty_files+=(
+    etc/machine-id
+  )
+fi
+
 for i in "${cleanup_dirs[@]}"; do
   umount -l "$FAI_ROOT"/$i || :
-  find "$FAI_ROOT"/$i -mindepth 1 -depth -delete
+  find -H "$FAI_ROOT"/$i -mindepth 1 -depth -delete
 done
 
 for i in "${cleanup_files[@]}"; do
-  find "$FAI_ROOT"/$i -depth -delete || :
+  find -H "$FAI_ROOT"/$i -depth -delete || :
 done
 
 for i in "${empty_files[@]}"; do
