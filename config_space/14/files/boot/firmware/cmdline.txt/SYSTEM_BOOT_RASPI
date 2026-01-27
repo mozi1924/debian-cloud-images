@@ -1,1 +1,1 @@
-console=tty0 console=ttyS1,115200 root=PARTUUID={%PARTUUID_ROOT%}
+console=tty0 root=PARTUUID={%PARTUUID_ROOT%}
