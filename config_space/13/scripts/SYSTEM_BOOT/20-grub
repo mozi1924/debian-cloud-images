@@ -21,7 +21,9 @@ grub_install() {
     "$@"
 }
 
-if ifclass AMD64; then
+if ! ifclass SYSTEM_BOOT_DEFAULT; then
+  exit 0
+elif ifclass AMD64; then
   mkdir -p "$FAI_ROOT"/boot/efi
   grub_install i386-pc /dev/null
   grub_install x86_64-efi

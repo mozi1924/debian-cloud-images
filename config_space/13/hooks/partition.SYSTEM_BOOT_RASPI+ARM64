@@ -1,0 +1,51 @@
+#!/bin/sh
+set -eu
+touch $LOGDIR/skip.partition
+
+set -- $disklist
+device=/dev/$1
+device_root="${device}p1"
+device_efi="${device}p15"
+
+wait_for_device() {
+  for s in $(seq 10); do
+    if [ -e "$1" ]; then
+      break
+    fi
+    sleep 1
+  done
+}
+
+sfdisk "$device" << EOF
+label: gpt
+unit: sectors
+
+# Raspberry PI firmware
+p15 : start=2048, size=1046528, type="EFI System", uuid=${PARTUUID_ESP}
+# Linux
+p1 : start=1048576, type="Linux root (ARM-64)", uuid=${PARTUUID_ROOT}
+EOF
+
+# Hybrid MBR for Raspberry Pi 3 firmware
+sfdisk "$device" --label-nested dos << EOF
+label: dos
+label-id: 0x00000000
+unit: sectors
+sector-size: 512
+
+# Protective partition
+p2 : start=1, size=2047, type=ee
+# Raspberry PI firmware
+p1 : start=2048, size=1046528, type=c
+# Protective partition
+p3 : start=1048576, type=ee
+EOF
+
+partprobe "$device"
+
+wait_for_device "$device_root"
+mkfs.ext4 -U "$FSUUID_ROOT" "$device_root"
+tune2fs -c 0 -i 0 "$device_root"
+
+wait_for_device "$device_efi"
+mkfs.vfat "$device_efi"
