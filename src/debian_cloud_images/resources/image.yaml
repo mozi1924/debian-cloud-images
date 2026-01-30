@@ -115,7 +115,7 @@ vendors:
   size: 3
   matches:
   - matchArches: [arm64]
-    matchReleases: [forky, sid]
+    matchReleases: [trixie, trixie-backports, forky, forky-backports, sid]
 
 types:
 - name: dev
