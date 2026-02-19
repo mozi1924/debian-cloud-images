@@ -42,6 +42,7 @@ class ImageUploaderEc2:
         self.add_tags = add_tags or {}
         self.permission_public = permission_public
         self._api_error_count = 0
+        self._bpa_disabled_regions = set()
 
         self.__compute = self.__storage = None
 
@@ -152,6 +153,8 @@ class ImageUploaderEc2:
             driver = snapshot.driver
             architecture = self.architecture_map[image.build_arch]
 
+            self.disable_image_block_public_access(image, public_info, driver.region_name)
+
             ec2_image = with_retries(lambda: driver.ex_register_image(
                 name=public_info.vendor_name,
                 description=public_info.vendor_description,
@@ -250,6 +253,29 @@ class ImageUploaderEc2:
                 }
             }],
         ))
+
+    def disable_image_block_public_access(self, image, public_info, region_name):
+        """ Disable image block public access"""
+        if not (self.permission_public and image.build_info.get('type') == 'official' and public_info.public_type.name in ('daily', 'release')):
+            return
+
+        if region_name in self._bpa_disabled_regions:
+            logging.debug('BPA already disabled for %s, skipping', region_name)
+            return
+
+        driver = self.compute[region_name]
+        try:
+            with_retries(lambda: driver.connection.request(
+                driver.path,
+                params={'Action': 'DisableImageBlockPublicAccess'},
+                method='POST'
+            ))
+
+        except BaseHTTPError as e:
+            logging.warning('Failed to disable image block public access for region %s: %s', region_name, e)
+            return
+        self._bpa_disabled_regions.add(region_name)
+        logging.info('Disabled image block public access for region %s', region_name)
 
     def delete_file(self, image, obj):
         """ Delete file from storage """
