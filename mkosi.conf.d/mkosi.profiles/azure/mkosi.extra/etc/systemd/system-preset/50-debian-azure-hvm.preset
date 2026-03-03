@@ -1,0 +1,2 @@
+disable hv-vss-daemon.service
+disable hv-kvp-daemon.service

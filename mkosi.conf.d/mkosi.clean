@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+rm -vf $SRCDIR/partitions $OUTPUTDIR/*.dpkg-status $OUTPUTDIR/*.info $OUTPUTDIR/*.partitions

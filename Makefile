@@ -49,4 +49,4 @@ oci_%:
 
 
 clean:
-	rm -rf mkosi.output oci_*.* image_*.* mkosi/cloud/.mkosi-private mkosi/cloud/partitions
+	rm -rf mkosi.output oci_*.* image_*.* mkosi.conf.d/.mkosi-private mkosi.conf.d/partitions

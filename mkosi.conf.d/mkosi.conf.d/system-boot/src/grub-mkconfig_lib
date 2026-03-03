@@ -1,0 +1,3 @@
+export grub_probe="/run/grub/grub-probe"
+export grub_probe="${SRCDIR}/mkosi.conf.d/system-boot/src/grub-probe"
+. /usr/lib/grub/grub-mkconfig_lib

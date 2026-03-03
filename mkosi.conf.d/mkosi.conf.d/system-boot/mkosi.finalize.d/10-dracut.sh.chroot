@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+# Regenerate initramfs images for all available kernels with the --reproducible flag enabled
+set -euo pipefail
+shopt -s nullglob
+generated=
+for k in /boot/vmlinu[xz]-*; do
+    kver=${k##/boot/vmlinu[xz]-}
+    dracut --reproducible --force --kver "$kver"
+    generated=1
+done
+
+test -n "$generated" || { echo "no kernels found" >&2; exit 1; }

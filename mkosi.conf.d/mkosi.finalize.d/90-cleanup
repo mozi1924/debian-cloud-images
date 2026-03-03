@@ -1,0 +1,54 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+set -euE
+
+cleanup_dirs=(
+  dev
+  proc
+  run
+  sys
+  tmp
+  var/cache/apt
+  var/lib/apt/lists
+  var/tmp
+)
+
+cleanup_files=(
+  efi
+  etc/apt/sources.list.d/localdebs.list
+  etc/mailname
+  etc/ssh/ssh_host_*
+  init
+  initrd.*
+  lib32
+  libx32
+  usr/lib32
+  usr/libx32
+  var/lib/dbus/machine-id
+  var/log/alternatives.log
+  var/log/apt
+  var/log/bootstrap.log
+  var/log/dpkg.log
+  var/log/install_packages.list
+  var/cache/ldconfig/aux-cache
+  vmlinu[zx]*
+)
+
+empty_files=(
+  etc/hostname
+  var/lib/dpkg/available
+)
+
+for i in "${cleanup_dirs[@]}"; do
+  umount -l "$BUILDROOT"/$i || :
+  find -H "$BUILDROOT"/$i -mindepth 1 -depth -delete
+done
+
+for i in "${cleanup_files[@]}"; do
+  find -P "$BUILDROOT"/$i -delete || :
+done
+
+for i in "${empty_files[@]}"; do
+  > "$BUILDROOT"/$i
+done
