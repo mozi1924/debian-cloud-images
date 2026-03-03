@@ -108,7 +108,9 @@ test python latest:
   script:
     - >
       apt-get install --no-install-recommends -y
-      binfmt-support ca-certificates debsums dosfstools fdisk make python3-pytest qemu-user-binfmt qemu-utils udev xz-utils
+      binfmt-support ca-certificates debsums dosfstools fdisk make
+      python3-pytest qemu-user-binfmt qemu-utils udev xz-utils
+      libarchive13 mtools e2fsprogs
     - |
       if [ "$CI_DISPOSABLE_ENVIRONMENT" ]; then
         # Some of our build environments run with SELinux enabled, make sure it is detected by all the tools

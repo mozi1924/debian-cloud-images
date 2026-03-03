@@ -75,7 +75,7 @@ class RunMkOSI:
         self.fix_release()
         return (
             'env',
-            'PATH=/usr/sbin:/usr/bin',
+            'PATH=mkosi-bin/bin:/usr/sbin:/usr/bin',
             f'PYTHONPATH={dci_path}',
         ) + tuple(f'{k}={v}' for k, v in sorted(self.env.items())) + (
 
