@@ -39,7 +39,7 @@ class AzureAuth(httpx.Auth):
         host = request.url.host
         path_list = request.url.path.split('/', 4)[1:]
         if host == 'management.azure.com' and path_list[0] == 'subscriptions':
-            key = ('https://management.core.windows.net/', path_list[1])
+            key = ('https://management.core.windows.net/.default', path_list[1])
         else:
             return None
 
