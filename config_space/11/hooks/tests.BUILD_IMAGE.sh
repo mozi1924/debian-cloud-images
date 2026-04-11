@@ -1,7 +1,4 @@
-#!/bin/bash
-set -eu
-
-exec pytest-3 \
+pytest-3 \
   -c "${CLOUD_BUILD_SYSTEM_TESTS}/pytest.ini" \
   -p debian_cloud_images.test.pytest.mount \
   --color=yes \
@@ -10,3 +7,8 @@ exec pytest-3 \
   --mount-path "${FAI_ROOT}" \
   --rootdir "$CLOUD_BUILD_SYSTEM_TESTS" \
   "${CLOUD_BUILD_SYSTEM_TESTS}/image"
+
+if [ $? -gt 0 ]; then
+  echo "ERROR: tests failed" >&2
+  exit 1
+fi
