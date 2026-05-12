@@ -1,6 +1,9 @@
 PACKAGES install-norec
 sudo
 
+# needed for fsck of ext4 filesystems
+e2fsprogs
+
 # needed for any useful login session
 libpam-systemd
 

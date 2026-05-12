@@ -7,8 +7,10 @@ mount --rbind /dev $FAI_ROOT/dev
 mount --make-private $FAI_ROOT/dev
 mount --bind /proc $FAI_ROOT/proc
 mount --make-private $FAI_ROOT/proc
-mount --bind /sys $FAI_ROOT/sys
-mount --make-private $FAI_ROOT/sys
+if ifclass BUILD_IMAGE; then
+  mount --bind /sys $FAI_ROOT/sys
+  mount --make-private $FAI_ROOT/sys
+fi
 mount -t tmpfs none $FAI_ROOT/var/tmp
 mount --make-private $FAI_ROOT/var/tmp
 mount -t tmpfs none $FAI_ROOT/tmp

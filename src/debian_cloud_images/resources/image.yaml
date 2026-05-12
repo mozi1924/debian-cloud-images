@@ -82,7 +82,7 @@ releases:
 
 vendors:
 - name: azure
-  faiClasses: [SYSTEM_BOOT, CLOUD, AZURE, LINUX_VARIANT_CLOUD, TIME_CHRONY, IPV6_DHCP]
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, CLOUD, AZURE, LINUX_VARIANT_CLOUD, TIME_CHRONY, IPV6_DHCP]
   size: 30
   matches:
   - matchArches: [amd64]
@@ -91,28 +91,34 @@ vendors:
     op: Disable
   - matchArches: [arm64]
 - name: ec2
-  faiClasses: [SYSTEM_BOOT, CLOUD, EC2, LINUX_VARIANT_CLOUD, TIME_SYSTEMD, IPV6_DHCP]
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, CLOUD, EC2, LINUX_VARIANT_CLOUD, TIME_SYSTEMD, IPV6_DHCP]
   size: 8
   matches:
   - matchArches: [amd64, arm64]
 - name: gce
-  faiClasses: [SYSTEM_BOOT, CLOUD, GCE, LINUX_VARIANT_CLOUD, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, CLOUD, GCE, LINUX_VARIANT_CLOUD, TIME_SYSTEMD]
   size: 10
   matches:
   - matchReleases: [bullseye]
     op: Disable
   - matchArches: [amd64]
 - name: generic
-  faiClasses: [SYSTEM_BOOT, CLOUD, GENERIC, LINUX_VARIANT_BASE, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, CLOUD, GENERIC, LINUX_VARIANT_BASE, TIME_SYSTEMD]
   size: 3
 - name: genericcloud
-  faiClasses: [SYSTEM_BOOT, CLOUD, GENERIC, LINUX_VARIANT_CLOUD, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, CLOUD, GENERIC, LINUX_VARIANT_CLOUD, TIME_SYSTEMD]
   size: 3
   matches:
   - matchArches: [amd64, arm64]
 - name: nocloud
-  faiClasses: [SYSTEM_BOOT, NOCLOUD, LINUX_VARIANT_BASE, TIME_SYSTEMD]
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, NOCLOUD, LINUX_VARIANT_BASE, TIME_SYSTEMD]
   size: 3
+- name: raspi
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_RASPI, NOCLOUD, LINUX_VARIANT_BASE, TIME_SYSTEMD]
+  size: 3
+  matches:
+  - matchArches: [arm64]
+    matchReleases: [trixie, trixie-backports, forky, forky-backports, sid]
 
 types:
 - name: dev
@@ -151,7 +157,7 @@ publicTypes:
     op: EnableUpload
   - matchVendors: [ec2]
     op: EnableUpload
-  - matchVendors: [generic, genericcloud, nocloud]
+  - matchVendors: [generic, genericcloud, nocloud, raspi]
 - name: release
   matches:
   - matchReleases: [sid]

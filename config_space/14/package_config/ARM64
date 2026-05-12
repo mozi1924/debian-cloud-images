@@ -5,5 +5,12 @@ PACKAGES install-norec LINUX_VERSION_BASE+LINUX_VARIANT_CLOUD LINUX_VERSION_BACK
 linux-image-cloud-arm64
 
 PACKAGES install-norec
-grub-cloud-arm64
 dosfstools
+
+PACKAGES install-norec SYSTEM_BOOT_DEFAULT
+grub-cloud-arm64
+
+PACKAGES install-norec SYSTEM_BOOT_RASPI
+raspi-firmware
+bluez-firmware
+firmware-brcm80211

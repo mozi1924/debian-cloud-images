@@ -1455,5 +1455,57 @@
       "CLOUD_RELEASE": "trixie-backports",
       "CLOUD_VENDOR": "nocloud"
     }
+  },
+  "raspi forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
+  "raspi sid arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
+  "raspi trixie arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
+  "raspi trixie-backports arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie-backports",
+      "CLOUD_VENDOR": "raspi"
+    }
   }
 }

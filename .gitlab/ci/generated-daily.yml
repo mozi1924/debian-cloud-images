@@ -1765,6 +1765,10 @@
       {
         "job": "nocloud forky s390x build",
         "optional": false
+      },
+      {
+        "job": "raspi forky arm64 build",
+        "optional": false
       }
     ],
     "rules": [
@@ -2738,6 +2742,58 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "raspi forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
+  "raspi sid arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_SID"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
+  "raspi trixie arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
+  "raspi trixie-backports arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_TRIXIE_BACKPORTS"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie-backports",
+      "CLOUD_VENDOR": "raspi"
+    }
+  },
   "sid upload": {
     "extends": ".upload",
     "needs": [
@@ -2828,6 +2884,10 @@
       {
         "job": "nocloud sid s390x build",
         "optional": false
+      },
+      {
+        "job": "raspi sid arm64 build",
+        "optional": false
       }
     ],
     "rules": [
@@ -2913,6 +2973,10 @@
       {
         "job": "nocloud trixie riscv64 build",
         "optional": false
+      },
+      {
+        "job": "raspi trixie arm64 build",
+        "optional": false
       }
     ],
     "rules": [
@@ -2989,6 +3053,10 @@
       },
       {
         "job": "nocloud trixie-backports ppc64el build",
+        "optional": false
+      },
+      {
+        "job": "raspi trixie-backports arm64 build",
         "optional": false
       }
     ],
