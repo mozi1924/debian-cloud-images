@@ -1,6 +1,16 @@
 #!/bin/sh
 set -euE
 
+set -x
+env|sort
+
 touch "${LOGDIR}/skip.extrbase"
 
-debootstrap --variant minbase --arch "$DEBOOTSTRAP_ARCH" "$SUITE" "$FAI_ROOT" "$DEBOOTSTRAP_MIRROR"
+echo "FAI_ROOT: $FAI_ROOT"
+findmnt "$FAI_ROOT"
+
+if ! debootstrap --verbose --variant minbase --arch "$DEBOOTSTRAP_ARCH" "$SUITE" "$FAI_ROOT" "$DEBOOTSTRAP_MIRROR"; then
+    echo "debootstrap.log:"
+    cat "$FAI_ROOT/debootstrap/debootstrap.log"
+    exit 1
+fi
