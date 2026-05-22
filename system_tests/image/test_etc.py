@@ -53,10 +53,12 @@ class TestEtc:
             'messagebus',
             # From package polkit
             'polkitd',
+            # From package systemd
+            'lpadmin',
             # From package tcpdump
             'tcpdump',
             # From package udev
-            'input', 'kvm', 'render', 'sgx',
+            'clock', 'input', 'kvm', 'render', 'sgx',
             # From package uuid-runtime
             'uuidd',
         ):
@@ -90,6 +92,8 @@ class TestEtc:
             'irc', 'gnats', 'nobody',
             # From package dbus
             'messagebus',
+            # From package dhcpdc-base
+            'dhcpcd',
             # From package polkit
             'polkitd',
             # From package openssh-server
