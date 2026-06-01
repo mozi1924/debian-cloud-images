@@ -190,7 +190,7 @@ class BuildDiskimageCommand(BaseCommand):
             struct.pack('<Q', part_bios_boot.start_sector + 1)
 
         logger.info('Writing grub core.img')
-        part_bios_boot.copy_in_bytes(core_img)
+        part_bios_boot.copy_in_bytes(bytes(core_img))
 
     def do_manifest(self, manifest: dict) -> None:
         output_raw = self.output / 'tmp' / 'diskimage.data.full.raw'
