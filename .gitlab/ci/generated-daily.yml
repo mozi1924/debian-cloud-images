@@ -1719,6 +1719,10 @@
         "optional": false
       },
       {
+        "job": "generic forky loong64 build",
+        "optional": false
+      },
+      {
         "job": "generic forky ppc64el build",
         "optional": false
       },
@@ -1744,6 +1748,10 @@
       },
       {
         "job": "nocloud forky arm64 build",
+        "optional": false
+      },
+      {
+        "job": "nocloud forky loong64 build",
         "optional": false
       },
       {
@@ -1928,6 +1936,19 @@
       "CLOUD_VENDOR": "generic"
     }
   },
+  "generic forky loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
   "generic forky ppc64el build": {
     "extends": ".build",
     "rules": [
@@ -1989,6 +2010,19 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
+  "generic sid loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_SID"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
       "CLOUD_RELEASE": "sid",
       "CLOUD_VENDOR": "generic"
     }
@@ -2487,6 +2521,19 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "nocloud forky loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_FORKY"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
   "nocloud forky ppc64el build": {
     "extends": ".build",
     "rules": [
@@ -2548,6 +2595,19 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
+  "nocloud sid loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "if": "$PIPELINE_RELEASE_SID"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
       "CLOUD_RELEASE": "sid",
       "CLOUD_VENDOR": "nocloud"
     }
@@ -2778,6 +2838,10 @@
         "optional": false
       },
       {
+        "job": "generic sid loong64 build",
+        "optional": false
+      },
+      {
         "job": "generic sid ppc64el build",
         "optional": false
       },
@@ -2803,6 +2867,10 @@
       },
       {
         "job": "nocloud sid arm64 build",
+        "optional": false
+      },
+      {
+        "job": "nocloud sid loong64 build",
         "optional": false
       },
       {

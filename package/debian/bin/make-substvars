@@ -21,6 +21,7 @@ class_arch = {
     'AZURE': {'amd64', 'arm64'},
     'EC2': {'amd64', 'arm64'},
     'GCE': {'amd64', 'arm64'},
+    'LOONG64': {'loong64'},
     'PPC64EL': {'ppc64el'},
     'RISCV64': {'riscv64'},
     'S390X': {'s390x'},

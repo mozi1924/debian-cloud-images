@@ -13,6 +13,9 @@ archs:
   azureName: Arm64
   ociArch: arm64
   faiClasses: [ARM64]
+- name: loong64
+  faiClasses: [LOONG64]
+  ociArch: loong64
 - name: ppc64el
   faiClasses: [PPC64EL]
   ociArch: ppc64le

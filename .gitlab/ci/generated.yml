@@ -650,6 +650,19 @@
       "CLOUD_VENDOR": "generic"
     }
   },
+  "generic forky loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
   "generic forky ppc64el build": {
     "extends": ".build",
     "rules": [
@@ -711,6 +724,19 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "generic"
+    }
+  },
+  "generic sid loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
       "CLOUD_RELEASE": "sid",
       "CLOUD_VENDOR": "generic"
     }
@@ -1209,6 +1235,19 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "nocloud forky loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
   "nocloud forky ppc64el build": {
     "extends": ".build",
     "rules": [
@@ -1270,6 +1309,19 @@
     ],
     "variables": {
       "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "nocloud"
+    }
+  },
+  "nocloud sid loong64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "loong64",
       "CLOUD_RELEASE": "sid",
       "CLOUD_VENDOR": "nocloud"
     }
