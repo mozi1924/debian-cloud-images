@@ -1,0 +1,276 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_comment": "ARM Template for Azure Compute Validation",
+    "_description": "Creates CloudValidation, ValidationExecutionPlan, and ExecutionPlanRun resources for VM image validation",
+    "_reference": "https://github.com/Azure/compute-validation-docs",
+    "_maintainer": "Debian Cloud Team"
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "southcentralus",
+      "metadata": {
+        "description": "Region for Microsoft.Validate resources. Currently only 'southcentralus' is supported in production."
+      }
+    },
+    "resourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group where CloudValidation, ExecutionPlan, and ExecutionPlanRun resources will be created."
+      }
+    },
+    "cloudValidationName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Microsoft.Validate/cloudValidations resource. Must be unique within the subscription."
+      }
+    },
+    "executionPlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the validationExecutionPlans child resource. Defines the test configuration."
+      }
+    },
+    "executionPlanRunName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the executionPlanRuns child resource. Represents a single execution of the plan."
+      }
+    },
+    "planConfiguration": {
+      "type": "object",
+      "metadata": {
+        "description": "Object containing the full validation configuration including certificationPackageReference, storageProfile, and validations. Will be stringified into planConfigurationJson."
+      }
+    },
+    "managedResourceGroupSuffix": {
+      "type": "string",
+      "defaultValue": "-mrg",
+      "metadata": {
+        "description": "Suffix appended to cloudValidationName to create the managed resource group name. Default: '-mrg'. The managed RG is where validation VMs and temporary resources are created."
+      }
+    },
+    "azValidationRpPrincipalId": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure AD Object ID (principalId) of the Azure Validation RP service principal. This SP needs Contributor role on the managed resource group. Get this value by running: az ad sp show --id f877b90d-59ee-40e3-8d2c-215dae4c80d8 --query id -o tsv"
+      }
+    },
+    "azValidationRpPrincipalType": {
+      "type": "string",
+      "defaultValue": "ServicePrincipal",
+      "allowedValues": [
+        "ServicePrincipal",
+        "User",
+        "Group",
+        "ForeignGroup",
+        "Device"
+      ],
+      "metadata": {
+        "description": "Principal type for role assignments. Should be 'ServicePrincipal' for the validation RP."
+      }
+    }
+  },
+  "variables": {
+    "managedRgName": "[concat(parameters('cloudValidationName'), parameters('managedResourceGroupSuffix'))]",
+    "_comment_managedRg": "Managed resource group where validation creates temporary VMs, disks, and network resources"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2022-09-01",
+      "name": "[parameters('resourceGroupName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "purpose": "debian-cloud-images-validation",
+        "managed-by": "debian-cloud-team"
+      }
+    },
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2022-09-01",
+      "name": "[variables('managedRgName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "purpose": "compute-validation-managed-resources",
+        "managed-by": "Microsoft.Validate",
+        "_comment": "Resources in this RG are created and deleted by the validation service"
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "assignRolesOnManagedRG",
+      "resourceGroup": "[variables('managedRgName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', variables('managedRgName'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "parameters": {
+          "principalId": {
+            "value": "[parameters('azValidationRpPrincipalId')]"
+          },
+          "principalType": {
+            "value": "[parameters('azValidationRpPrincipalType')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "principalId": {
+              "type": "string"
+            },
+            "principalType": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "name": "[guid(resourceGroup().id, parameters('principalId'), 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[parameters('principalId')]",
+                "principalType": "[parameters('principalType')]",
+                "description": "Contributor role for Azure Validation RP to create/manage validation resources"
+              }
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "name": "[guid(resourceGroup().id, parameters('principalId'), 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                "principalId": "[parameters('principalId')]",
+                "principalType": "[parameters('principalType')]",
+                "description": "Storage Blob Data Contributor role for Azure Validation RP to access VHD blobs"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "deployCloudValidationAndPlan",
+      "resourceGroup": "[parameters('resourceGroupName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroupName'))]",
+        "assignRolesOnManagedRG"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "location": {
+              "type": "string"
+            },
+            "cloudValidationName": {
+              "type": "string"
+            },
+            "executionPlanName": {
+              "type": "string"
+            },
+            "executionPlanRunName": {
+              "type": "string"
+            },
+            "planConfiguration": {
+              "type": "object"
+            }
+          },
+          "variables": {
+            "planConfigurationJson": "[string(parameters('planConfiguration'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Validate/cloudValidations",
+              "apiVersion": "2026-02-01-preview",
+              "name": "[parameters('cloudValidationName')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "purpose": "debian-cloud-images-validation"
+              }
+            },
+            {
+              "type": "Microsoft.Validate/cloudValidations/validationExecutionPlans",
+              "apiVersion": "2026-02-01-preview",
+              "name": "[format('{0}/{1}', parameters('cloudValidationName'), parameters('executionPlanName'))]",
+              "location": "[parameters('location')]",
+              "dependsOn": [
+                "[resourceId('Microsoft.Validate/cloudValidations', parameters('cloudValidationName'))]"
+              ],
+              "properties": {
+                "planConfigurationJson": "[variables('planConfigurationJson')]"
+              }
+            },
+            {
+              "type": "Microsoft.Validate/cloudValidations/validationExecutionPlans/executionPlanRuns",
+              "apiVersion": "2026-02-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('cloudValidationName'), parameters('executionPlanName'), parameters('executionPlanRunName'))]",
+              "dependsOn": [
+                "[resourceId('Microsoft.Validate/cloudValidations', parameters('cloudValidationName'))]",
+                "[resourceId('Microsoft.Validate/cloudValidations/validationExecutionPlans', parameters('cloudValidationName'), parameters('executionPlanName'))]"
+              ],
+              "properties": {}
+            }
+          ],
+          "outputs": {}
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "cloudValidationName": {
+            "value": "[parameters('cloudValidationName')]"
+          },
+          "executionPlanName": {
+            "value": "[parameters('executionPlanName')]"
+          },
+          "executionPlanRunName": {
+            "value": "[parameters('executionPlanRunName')]"
+          },
+          "planConfiguration": {
+            "value": "[parameters('planConfiguration')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "cloudValidationId": {
+      "type": "string",
+      "value": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Validate/cloudValidations', parameters('cloudValidationName'))]",
+      "metadata": {
+        "description": "Resource ID of the created CloudValidation resource"
+      }
+    },
+    "managedResourceGroupName": {
+      "type": "string",
+      "value": "[variables('managedRgName')]",
+      "metadata": {
+        "description": "Name of the managed resource group where validation VMs are created"
+      }
+    },
+    "executionPlanRunId": {
+      "type": "string",
+      "value": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Validate/cloudValidations/validationExecutionPlans/executionPlanRuns', parameters('cloudValidationName'), parameters('executionPlanName'), parameters('executionPlanRunName'))]",
+      "metadata": {
+        "description": "Resource ID of the ExecutionPlanRun resource to poll for results"
+      }
+    }
+  }
+}
