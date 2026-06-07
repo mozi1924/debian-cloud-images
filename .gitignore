@@ -10,3 +10,11 @@ __pycache__/
 /image-*.build.json
 /image-*.build-fai.json
 /image-*.build.junit.xml
+/image_*.build.json
+/image_*.build.junit.xml
+/image_*.dpkg-status
+/image_*.fsuuid
+/image_*.info
+/image_*.partuuid
+/image_*.raw
+/image_*.tar
