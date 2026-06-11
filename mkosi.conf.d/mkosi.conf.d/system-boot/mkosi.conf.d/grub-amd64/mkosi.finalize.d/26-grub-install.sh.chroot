@@ -1,0 +1,49 @@
+#!/usr/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+set -euo pipefail
+
+. "${ARTIFACTDIR}/partitions"
+
+echo "### Installing early grub config" >&2
+### The following is normally part of `grub-install`, but we want full control
+### over the core that gets embedded in the image, so we generate it here.
+mkdir -p /boot/grub/x86_64-efi
+cat <<EOF > /boot/grub/x86_64-efi/load.cfg
+search.fs_uuid ${FSUUID_ROOT} root
+set prefix=(\$root)'/boot/grub'
+configfile \$prefix/grub.cfg
+EOF
+
+echo "### Generating grub core"
+grub-mkimage --verbose \
+             --directory '/usr/lib/grub/x86_64-efi' \
+             --prefix '/boot/grub' \
+             --output '/boot/grub/x86_64-efi/core.efi' \
+             --format 'x86_64-efi' \
+             --compression 'auto' \
+             --config '/boot/grub/x86_64-efi/load.cfg' \
+             'ext2' 'part_gpt' 'ext2' 'part_gpt' 'search_fs_uuid'
+
+echo "### Installing grub components"
+
+mkdir -p /boot/grub/locale
+for f in $(find /usr/share/locale/ -type f -name 'grub.mo'); do
+    locale=$(echo "$f" | awk -F/ '{print $5}')
+    install "$f" "/boot/grub/locale/${locale}.mo"
+done
+
+for f in $(find /usr/lib/grub/x86_64-efi -mindepth 1 -maxdepth 1 -type f); do
+    install "$f" "/boot/grub/x86_64-efi"
+done
+
+install -D /usr/share/grub/unicode.pf2 /boot/grub/fonts/unicode.pf2
+install -D /usr/lib/shim/shimx64.efi.signed /boot/efi/EFI/debian/shimx64.efi
+install -D /usr/lib/grub/x86_64-efi-signed/grubx64.efi.signed /boot/efi/EFI/debian/grubx64.efi
+install -D /usr/lib/shim/mmx64.efi.signed /boot/efi/EFI/debian/mmx64.efi
+install -D /usr/lib/shim/fbx64.efi.signed /boot/efi/EFI/debian/fbx64.efi
+install -D /usr/lib/shim/BOOTX64.CSV /boot/efi/EFI/debian/BOOTX64.CSV
+install -D /usr/lib/shim/shimx64.efi.signed /boot/efi/EFI/BOOT/BOOTX64.EFI
+install -D /usr/lib/grub/x86_64-efi-signed/grubx64.efi.signed /boot/efi/EFI/BOOT/grubx64.efi
+install -D /usr/lib/shim/mmx64.efi.signed /boot/efi/EFI/BOOT/mmx64.efi
+install -D /boot/grub/x86_64-efi/load.cfg /boot/efi/EFI/debian/grub.cfg

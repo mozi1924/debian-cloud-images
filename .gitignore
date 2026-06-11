@@ -10,3 +10,4 @@ __pycache__/
 /image-*.build.json
 /image-*.build-fai.json
 /image-*.build.junit.xml
+/output

@@ -1,0 +1,33 @@
+#!/usr/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+set -euo pipefail
+
+. "${ARTIFACTDIR}/partitions"
+
+# Fail if we're missing critical dependencies. This is mostly a check to ensure
+# visibility of regressions when developing, as the grub-mkconfig will fail
+# silently if any of these are missing (ask me how I know...)
+test -n "$PARTUUID_ROOT"
+test -n "$FSUUID_ROOT"
+
+mkdir -p "/boot/grub"
+
+# Call `grub-mkconfig` while using our own `grub-probe`.
+# `pkgdatadir` can be defined from the outside and is used to find
+# `grub-mkconfig_lib`.  `grub-mkconfig_lib` is then used to set a different
+# path for `grub-probe`.  `grub-mkconfig` won't emit root with UUID/PARTUUID,
+# if it can't find them in `/dev/disks`, so use a static string and replace it
+# here.
+echo "### Generating custom grub.cfg" >&2
+pkgdatadir="${SRCDIR}/mkosi.conf.d/system-boot/src" grub-mkconfig | \
+  sed \
+    -e "s|##DEV##|PARTUUID=${PARTUUID_ROOT}|" \
+    -e "s|##FSUUID##|${FSUUID_ROOT}|" \
+    -e "s|##PARTUUID##|${PARTUUID_ROOT}|" \
+    > /boot/grub/grub.cfg
+
+# this is unfortunate
+sed -i -E 's#(^\s*(initrd|linux)\s+)[^[:space:]]+(/boot/.*)#\1\3#' /boot/grub/grub.cfg
+
+exit 0

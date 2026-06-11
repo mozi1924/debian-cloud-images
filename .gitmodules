@@ -1,0 +1,4 @@
+[submodule "mkosi-bin"]
+	path = mkosi-bin
+	url = https://github.com/nmeyerhans/mkosi.git
+	branch = cloud

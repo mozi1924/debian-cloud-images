@@ -1,0 +1,77 @@
+#!/usr/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+set -euo pipefail
+
+. "${ARTIFACTDIR}/partitions"
+
+case "$DISTRIBUTION_ARCHITECTURE" in
+    arm64)
+        grub_arch=arm64-efi
+        ;;
+    amd64)
+        grub_arch=x86_64-efi
+        ;;
+    *)
+        echo "Unsupported arch $DISTRIBUTION_ARCHITECTURE" >&2
+        exit 1
+        ;;
+esac
+
+echo "### Installing early grub config" >&2
+### The following is normally part of `grub-install`, but we want full control
+### over the core that gets embedded in the image, so we generate it here.
+mkdir -p /boot/grub/"${grub_arch}"
+cat <<EOF > /boot/grub/"${grub_arch}"/load.cfg
+search.fs_uuid ${FSUUID_ROOT} root
+set prefix=(\$root)'/boot/grub'
+configfile \$prefix/grub.cfg
+EOF
+
+echo "### Generating grub core"
+grub-mkimage --verbose \
+             --directory /usr/lib/grub/"${grub_arch}" \
+             --prefix /boot/grub \
+             --output /boot/grub/"${grub_arch}"/core.efi \
+             --format "${grub_arch}" \
+             --compression 'auto' \
+             --config /boot/grub/"${grub_arch}"/load.cfg \
+             'ext2' 'part_gpt' 'ext2' 'part_gpt' 'search_fs_uuid'
+
+echo "### Installing grub components"
+
+mkdir -p /boot/grub/locale
+for f in $(find /usr/share/locale/ -type f -name 'grub.mo'); do
+    locale=$(echo "$f" | awk -F/ '{print $5}')
+    install "$f" "/boot/grub/locale/${locale}.mo"
+done
+
+for f in $(find /usr/lib/grub/"${grub_arch}" -mindepth 1 -maxdepth 1 -type f); do
+    install "$f" "/boot/grub/${grub_arch}"
+done
+
+install -D /usr/share/grub/unicode.pf2 /boot/grub/fonts/unicode.pf2
+
+shimfiles=(
+    fbaa64.efi.signed
+    mmaa64.efi.signed
+    shimaa64.efi.signed
+    BOOTAA64.CSV
+)
+for f in "${shimfiles[@]}"; do
+    tgt=${f%%.signed}
+    install -D /usr/lib/shim/"$f" /boot/efi/EFI/debian/"$tgt"
+    if [[ "$f" != shim* ]] && [[ "$f" != fb* ]]; then
+        install -D /usr/lib/shim/"$f" /boot/efi/EFI/BOOT/"$tgt"
+    fi
+done
+install -D /usr/lib/shim/shimaa64.efi.signed /boot/efi/EFI/BOOT/BOOTAA64.EFI
+
+grubimages=(grubaa64.efi.signed)
+for f in "${grubimages[@]}"; do
+    tgt=${f%%.signed}
+    install -D /usr/lib/grub/"${grub_arch}"-signed/"$f" /boot/efi/EFI/debian/"$tgt"
+    install -D /usr/lib/grub/"${grub_arch}"-signed/"$f" /boot/efi/EFI/BOOT/"$tgt"
+done
+
+install -D /boot/grub/${grub_arch}/load.cfg /boot/efi/EFI/debian/grub.cfg

@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+set -euo pipefail
+
+. "${ARTIFACTDIR}/partitions"
+
+echo "### Installing early grub config" >&2
+### The following is normally part of `grub-install`, but we want full control
+### over the core that gets embedded in the image, so we generate it here.
+mkdir -p /boot/grub/i386-pc
+cat <<EOF > /boot/grub/i386-pc/load.cfg
+search.fs_uuid ${FSUUID_ROOT} root
+set prefix=(\$root)'/boot/grub'
+configfile \$prefix/grub.cfg
+EOF
+
+echo "### Generating grub core"
+grub-mkimage --directory '/usr/lib/grub/i386-pc' \
+             --prefix '(,gpt1)/boot/grub' \
+             --output '/boot/grub/i386-pc/core.img' \
+             --format 'i386-pc' \
+             --compression 'auto' \
+             --config '/boot/grub/i386-pc/load.cfg' \
+             'ext2' 'part_gpt' 'biosdisk'
+
+echo "### Installing grub components"
+
+mkdir -p /boot/grub/locale
+for f in $(find /usr/share/locale/ -type f -name 'grub.mo'); do
+    locale=$(echo "$f" | awk -F/ '{print $5}')
+    install "$f" "/boot/grub/locale/${locale}.mo"
+done
+
+for f in $(find /usr/lib/grub/i386-pc -mindepth 1 -maxdepth 1 -type f); do
+    install "$f" "/boot/grub/i386-pc"
+done
