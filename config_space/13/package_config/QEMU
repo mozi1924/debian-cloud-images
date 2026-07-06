@@ -3,3 +3,4 @@ qemu-guest-agent
 curl
 tmux
 htop
+git
