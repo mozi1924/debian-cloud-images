@@ -10,15 +10,19 @@ help:
 	@echo "    And <ARCH> is amd64, arm64, ppc64el, riscv64, s390x"
 	@echo "Set DESTDIR= to write images to given directory."
 
+TYPE ?= dev
+
 image_%:
 	umask 022; \
 	./bin/debian-cloud-images build \
 	  $(subst _, ,$*) \
 	  --build-id manual \
 	  --version $(shell date '+%Y%m%d%H%M') \
+	  --build-type $(TYPE) \
 	  --localdebs \
 	  --output $(DESTDIR) \
 	  --override-name $@
+
 
 clean:
 	rm -rf image_*.*
