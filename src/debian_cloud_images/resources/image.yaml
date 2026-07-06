@@ -107,6 +107,11 @@ vendors:
   size: 3
   matches:
   - matchArches: [amd64, arm64]
+- name: qemu
+  faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, CLOUD, GENERIC, QEMU, LINUX_VARIANT_BASE, TIME_SYSTEMD]
+  size: 3
+  matches:
+  - matchArches: [amd64, arm64]
 - name: nocloud
   faiClasses: [SYSTEM_BOOT, SYSTEM_BOOT_DEFAULT, NOCLOUD, LINUX_VARIANT_BASE, TIME_SYSTEMD]
   size: 3
@@ -154,7 +159,7 @@ publicTypes:
     op: EnableUpload
   - matchVendors: [ec2]
     op: EnableUpload
-  - matchVendors: [generic, genericcloud, nocloud, raspi]
+  - matchVendors: [generic, genericcloud, qemu, nocloud, raspi]
 - name: release
   matches:
   - matchReleases: [sid]
@@ -177,4 +182,4 @@ publicTypes:
     op: EnableUpload
   - matchVendors: [ec2]
     op: EnableUpload
-  - matchVendors: [generic, genericcloud]
+  - matchVendors: [generic, genericcloud, qemu]

@@ -1404,6 +1404,214 @@
       "CLOUD_VENDOR": "nocloud"
     }
   },
+  "qemu bookworm amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "bookworm",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu bookworm arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "bookworm",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu bookworm-backports amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "bookworm-backports",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu bookworm-backports arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "bookworm-backports",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu bullseye amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "bullseye",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu bullseye arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "bullseye",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu bullseye-backports amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu bullseye-backports arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "bullseye-backports",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu forky amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu forky arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "forky",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu sid amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu sid arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "sid",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu trixie amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu trixie arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu trixie-backports amd64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "amd64",
+      "CLOUD_RELEASE": "trixie-backports",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
+  "qemu trixie-backports arm64 build": {
+    "extends": ".build",
+    "rules": [
+      {
+        "when": "manual"
+      }
+    ],
+    "variables": {
+      "CLOUD_ARCH": "arm64",
+      "CLOUD_RELEASE": "trixie-backports",
+      "CLOUD_VENDOR": "qemu"
+    }
+  },
   "raspi forky arm64 build": {
     "extends": ".build",
     "rules": [

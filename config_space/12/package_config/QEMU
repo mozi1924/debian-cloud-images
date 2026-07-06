@@ -1,0 +1,5 @@
+PACKAGES install-norec
+qemu-guest-agent
+curl
+tmux
+htop

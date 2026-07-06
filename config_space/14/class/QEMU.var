@@ -1,0 +1,3 @@
+DEBOOTSTRAP_MIRROR=https://mirrors.ustc.edu.cn/debian/
+apt_cdn=https://mirrors.ustc.edu.cn
+security_cdn=https://mirrors.ustc.edu.cn
