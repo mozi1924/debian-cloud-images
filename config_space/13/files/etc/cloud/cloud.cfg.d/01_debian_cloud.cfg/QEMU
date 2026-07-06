@@ -1,5 +1,5 @@
 apt:
-  generate_mirrorlists: false
+  generate_mirrorlists: true
 
 system_info:
   default_user:
@@ -11,3 +11,9 @@ system_info:
     groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
     shell: /bin/bash
+
+  package_mirrors:
+  - arches: [default]
+    failsafe:
+      primary: https://mirrors.ustc.edu.cn/debian
+      security: https://mirrors.ustc.edu.cn/debian-security
