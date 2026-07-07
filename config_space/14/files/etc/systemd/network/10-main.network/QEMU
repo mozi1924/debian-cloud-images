@@ -1,0 +1,16 @@
+[Match]
+Name=*
+
+[Network]
+DHCP=yes
+
+[DHCPv4]
+ClientIdentifier=mac
+
+[DHCPv6]
+RequestAddress=yes
+WithoutRA=solicit
+UseDelegatedPrefix=no
+
+[DHCPPrefixDelegation]
+Announce=no
